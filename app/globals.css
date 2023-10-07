@@ -16,7 +16,7 @@
     --primary: black;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 224, 91%, 65%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -73,4 +73,14 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(233, 238, 255, 1) 100%
+  );
+  min-height: 100dvh;
 }

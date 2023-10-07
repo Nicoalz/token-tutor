@@ -13,6 +13,7 @@ struct TutorTime {
 }
 
 struct Tutor {
+    string name;
     address tutor;
     uint mintedAmount;
     uint maxMint;
@@ -23,6 +24,7 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
     uint private _nextTokenId;
 
     mapping(address => Tutor) public addressToTutor;
+    address[] public allTutors;
 
     // Token metadata
     mapping(uint => TutorTime) public tokenData;
@@ -57,11 +59,27 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
         payable(tutor).transfer(tutorData.hourPrice);
     }
 
-    function setTutorPreferences(uint maxMint, uint price) public {
+    function setTutorPreferences(
+        uint maxMint,
+        uint price,
+        string memory name
+    ) public {
         Tutor storage tutorData = addressToTutor[msg.sender];
+        tutorData.name = name;
         tutorData.tutor = msg.sender;
         tutorData.maxMint = maxMint;
         tutorData.hourPrice = price;
+        // Add tutor to allTutors array if not already in it
+        bool tutorSaved = false;
+        for (uint i = 0; i < allTutors.length; i++) {
+            if (allTutors[i] == msg.sender) {
+                tutorSaved = true;
+                break;
+            }
+        }
+        if (!tutorSaved) {
+            allTutors.push(msg.sender);
+        }
     }
 
     // Get all the tutor times minted by a student
@@ -108,5 +126,13 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
         );
         tokenData[tokenId].redeemedAt = block.timestamp;
         super.burn(tokenId);
+    }
+
+    function getAllTutors() public view returns (Tutor[] memory) {
+        Tutor[] memory allTutorsData = new Tutor[](allTutors.length);
+        for (uint i = 0; i < allTutors.length; i++) {
+            allTutorsData[i] = addressToTutor[allTutors[i]];
+        }
+        return allTutorsData;
     }
 }

@@ -9,7 +9,7 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <div className="flex p-3 px-32  w-full justify-between items-center">
+    <div className="flex p-3 px-32  w-full justify-between items-center bg-white/25 shadow-md shadow-black/5">
       <Link
         href="/"
         className="flex items-center space-x-2 font-bold w-44 text-xl"
@@ -17,7 +17,7 @@ export default function Header() {
         <Logo width={120} height={120} />
       </Link>
       <div className="flex gap-3">
-        <Button variant={"link"} onClick={() => router.push("/social")}>
+        <Button variant={"link"} onClick={() => router.push("/learn")}>
           Learn
         </Button>
         <Button variant={"link"} onClick={() => router.push("/loans")}>

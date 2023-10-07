@@ -2,9 +2,11 @@
 
 import { PrivyProvider } from "@privy-io/react-auth";
 import "./globals.css";
+
 import { Inter } from "next/font/google";
 import Header from "@/components/header";
 import { sepolia } from "@wagmi/chains";
+import Web3Provider from "./web3-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +31,7 @@ export default function RootLayout({
       >
         <body className={inter.className}>
           <Header />
-          {children}
+          <Web3Provider>{children}</Web3Provider>
         </body>
       </PrivyProvider>
     </html>

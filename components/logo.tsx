@@ -8,5 +8,5 @@ export default function Logo({
   height: number;
 }) {
   // return <Image alt="logo" src="/logo.png" width={width} height={height} />;
-  return <h1>TokenTutor</h1>;
+  return <h1 className="text-secondary">TokenTutor</h1>;
 }
