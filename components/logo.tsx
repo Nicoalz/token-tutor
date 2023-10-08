@@ -7,6 +7,6 @@ export default function Logo({
   width: number;
   height: number;
 }) {
-  // return <Image alt="logo" src="/logo.png" width={width} height={height} />;
+  return <Image alt="logo" src="/token-tutor-white.png" width={width} height={height} />;
   return <h1 className="text-secondary">TokenTutor</h1>;
 }

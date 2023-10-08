@@ -2,12 +2,12 @@
 
 import { PrivyProvider } from "@privy-io/react-auth";
 import "./globals.css";
-
+import { XMTPProvider } from "@xmtp/react-sdk";
 import { Inter } from "next/font/google";
 import Header from "@/components/header";
-import { sepolia } from "@wagmi/chains";
-import Web3Provider from "./web3-provider";
-
+import { sepolia, mainnet } from "@wagmi/chains";
+import Web3Provider from "../components/web3-provider";
+import XMTP from "@/components/XMTP";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -25,14 +25,19 @@ export default function RootLayout({
           appearance: {
             theme: "light",
             accentColor: "#676FFF",
-            logo: "https://your-logo-url",
+            logo: "/token-tutor.png",
           },
         }}
       >
-        <body className={inter.className}>
-          <Header />
-          <Web3Provider>{children}</Web3Provider>
-        </body>
+        <XMTPProvider>
+          <body className={inter.className}>
+            <Header />
+            <Web3Provider>
+              {children}
+              <XMTP />
+            </Web3Provider>
+          </body>
+        </XMTPProvider>
       </PrivyProvider>
     </html>
   );

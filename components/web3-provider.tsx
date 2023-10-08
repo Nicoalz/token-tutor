@@ -18,7 +18,7 @@ export default function Web3Provider({
   const [signer, setSigner] = useState<Signer>();
 
   const fetchSigner = async (allWallets: ConnectedWallet) => {
-    setSigner(await getSigner(allWallets));
+    setSigner(await getSigner(allWallets) as unknown as Signer);
   };
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useContext, useState } from "react";
-import { Web3Context } from "../web3-provider";
+import { Web3Context } from "../../components/web3-provider";
 import { Contract } from "ethers";
 import { contracts } from "@/lib/utils";
 import { Tutor } from "@/lib/types";

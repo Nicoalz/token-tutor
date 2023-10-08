@@ -17,12 +17,25 @@ export default function Header() {
         <Logo width={120} height={120} />
       </Link>
       <div className="flex gap-3">
-        <Button variant={"link"} onClick={() => router.push("/learn")}>
+        {/* <Button variant={"link"} onClick={() => router.push("/learn")}>
           Learn
         </Button>
         <Button variant={"link"} onClick={() => router.push("/loans")}>
           Teach
-        </Button>
+        </Button> */}
+        {/* c est pas mieux les Link natif de next ? */}
+        <Link
+          className="text-primary underline-offset-4 hover:underline hover:text-secondary"
+          href="/learn"
+        >
+          <p>Learn</p>
+        </Link>
+        <Link
+          className="text-primary underline-offset-4 hover:underline hover:text-secondary"
+          href="/teach"
+        >
+          <p>Teach</p>
+        </Link>
       </div>
 
       <LoginButton />
