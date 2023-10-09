@@ -1,5 +1,4 @@
 "use client";
-
 import { PrivyProvider } from "@privy-io/react-auth";
 import "./globals.css";
 import { XMTPProvider } from "@xmtp/react-sdk";
@@ -8,6 +7,7 @@ import Header from "@/components/header";
 import { sepolia, mainnet } from "@wagmi/chains";
 import Web3Provider from "../components/web3-provider";
 import XMTP from "@/components/XMTP";
+import XMTPDemo from "@/components/XMTPDemo";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -34,7 +34,7 @@ export default function RootLayout({
             <Header />
             <Web3Provider>
               {children}
-              <XMTP />
+              <XMTPDemo />
             </Web3Provider>
           </body>
         </XMTPProvider>

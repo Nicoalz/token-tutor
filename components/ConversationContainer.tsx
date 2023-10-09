@@ -1,0 +1,158 @@
+import React, { useState, useEffect } from "react";
+import { MessageContainer } from "./MessageContainer";
+import { useCanMessage, Client } from "@xmtp/react-sdk";
+import { ListConversations } from "./ListConversations";
+import { ethers } from "ethers";
+import { NewConversation } from "./NewConversation";
+
+export const ConversationContainer =  ({
+  client,
+  selectedConversation,
+  setSelectedConversation,
+}: {
+  client: Client;
+  selectedConversation: any;
+  setSelectedConversation: any;
+}) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [peerAddress, setPeerAddress] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [loadingResolve, setLoadingResolve] = useState(false);
+  const { canMessage } = useCanMessage();
+  const [conversationFound, setConversationFound] = useState(false);
+
+  const styles = {
+    conversations: {
+      height: "100%",
+    },
+    conversationList: {
+      //overflowY: "auto",
+      padding: "0px",
+      margin: "0",
+      listStyle: "none",
+      overflowY: "scroll",
+    },
+    createNewButton: {
+      border: "1px",
+      padding: "5px",
+      borderRadius: "5px",
+      marginTop: "10px",
+    },
+    peerAddressInput: {
+      width: "100%",
+      padding: "10px",
+      boxSizing: "border-box",
+      border: "0px solid #ccc",
+    },
+  };
+  const isValidEthereumAddress = (address: string) => {
+    return /^0x[a-fA-F0-9]{40}$/.test(address);
+  };
+
+  const handleSearchChange = async (e: any) => {
+    setSearchTerm(e.target.value);
+    console.log("handleSearchChange", e.target.value);
+    setMessage("Searching...");
+    const addressInput = e.target.value;
+    const isEthDomain = /\.eth$/.test(addressInput);
+    let resolvedAddress = addressInput;
+    if (isEthDomain) {
+      setLoadingResolve(true);
+      try {
+        const provider = new ethers.providers.CloudflareProvider();
+        resolvedAddress = await provider.resolveName(resolvedAddress);
+      } catch (error) {
+        console.log(error);
+        setMessage("Error resolving address");
+      } finally {
+        setLoadingResolve(false);
+      }
+    }
+    console.log("resolvedAddress", resolvedAddress);
+    if (resolvedAddress && isValidEthereumAddress(resolvedAddress)) {
+      processEthereumAddress(resolvedAddress);
+      setSearchTerm(resolvedAddress); // <-- Add this line
+    } else {
+      setMessage("Invalid Ethereum address");
+      setPeerAddress("");
+      //setCanMessage(false);
+    }
+  };
+
+  const processEthereumAddress = async (address: string) => {
+    setPeerAddress(address);
+    if (address === client.address) {
+      setMessage("No self messaging allowed");
+      // setCanMessage(false);
+    } else {
+      const canMessageStatus = await client?.canMessage(address);
+      if (canMessageStatus) {
+        setPeerAddress(address);
+        // setCanMessage(true);
+        setMessage("Address is on the network ✅");
+      } else {
+        //  setCanMessage(false);
+        setMessage("Address is not on the network ❌");
+      }
+    }
+  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  return (
+    <div style={styles.conversations}>
+      {!selectedConversation && (
+        <ul style={styles.conversationList as React.CSSProperties}>
+          <input
+            type="text"
+            placeholder="Enter a 0x wallet, ENS, or UNS address"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={styles.peerAddressInput as React.CSSProperties}
+          />
+          {loadingResolve && searchTerm && <small>Resolving address...</small>}
+          <ListConversations
+            searchTerm={searchTerm}
+            selectConversation={setSelectedConversation}
+            client={client}
+            onConversationFound={(state: any) => {
+              setConversationFound(state);
+            }}
+          />
+          {/*&&
+            (await canMessage(peerAddress)) */}
+          {peerAddress  &&
+            !conversationFound && (
+              <>
+                {message && <small>{message}</small>}
+                <button
+                  style={styles.createNewButton}
+                  onClick={() => {
+                    setSelectedConversation({ messages: [] });
+                  }}
+                >
+                  Create new conversation
+                </button>
+              </>
+            )}
+        </ul>
+      )}
+      {selectedConversation && (
+        <>
+          {selectedConversation.id ? (
+            <MessageContainer
+              client={client}
+              conversation={selectedConversation}
+            />
+          ) : (
+            <NewConversation
+              selectConversation={setSelectedConversation}
+              peerAddress={peerAddress}
+            />
+          )}
+        </>
+      )}
+    </div>
+  );
+};
