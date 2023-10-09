@@ -50,7 +50,11 @@ export default function Learn() {
   const handleSearch = (e: any) => {
     const value = e.target.value.toLowerCase();
     const filteredTutors = savedTutors.filter((tutor) => {
-      return tutor.tutorAddress.toLowerCase().includes(value);
+      return (
+        tutor.tutorAddress.toLowerCase().includes(value) ||
+        tutor.name.toLowerCase().includes(value) ||
+        tutor.description.toLowerCase().includes(value)
+      );
     });
     setTutors(filteredTutors);
   };
