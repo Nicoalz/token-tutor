@@ -7,12 +7,17 @@ import { Signer } from "ethers";
 import { Web3Context } from "./web3-provider";
 export default function XMTPDemo() {
   const { signer: wallet } = useContext(Web3Context);
-  const initialIsOpen =
-    localStorage.getItem("isWidgetOpen") === "true" || false;
-  const initialIsOnNetwork =
-    localStorage.getItem("isOnNetwork") === "true" || false;
-  const initialIsConnected =
-    (localStorage.getItem("isConnected") && wallet) || false;
+  const isBrowser = typeof window !== "undefined";
+
+  const initialIsOpen = isBrowser
+    ? localStorage.getItem("isWidgetOpen") === "true" || false
+    : false;
+  const initialIsOnNetwork = isBrowser
+    ? localStorage.getItem("isOnNetwork") === "true" || false
+    : false;
+  const initialIsConnected = isBrowser
+    ? (localStorage.getItem("isConnected") && wallet) || false
+    : false;
 
   const { client, error, isLoading, initialize } = useClient();
   const [loading, setLoading] = useState(false);
@@ -182,10 +187,12 @@ export default function XMTPDemo() {
   const closeWidget = () => {
     setIsOpen(false);
   };
-  (window as any).FloatingInbox = {
-    open: openWidget,
-    close: closeWidget,
-  };
+  if (typeof window !== "undefined") {
+    (window as any).FloatingInbox = {
+      open: () => setIsOpen(true),
+      close: () => setIsOpen(false),
+    };
+  }
   const handleLogout = async () => {
     setIsConnected(false);
     const address = await getAddress(signer);
