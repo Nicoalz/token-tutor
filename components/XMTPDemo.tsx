@@ -5,7 +5,7 @@ import { ConversationContainer } from "./ConversationContainer";
 import { Signer } from "ethers";
 
 import { Web3Context } from "./web3-provider";
-export default function XMTPDemo() {
+export default function XMTPDemo({ isPWA = false }: { isPWA?: boolean }) {
   const { signer: wallet } = useContext(Web3Context);
   const isBrowser = typeof window !== "undefined";
 
@@ -47,12 +47,12 @@ export default function XMTPDemo() {
       transition: "transform 0.3s ease",
       padding: "5px",
     },
-    Button: {
-      position: "fixed",
-      bottom: "70px",
-      right: "20px",
-      width: "300px",
-      height: "400px",
+    uContainer: {
+      position: isPWA == true ? "relative" : "fixed",
+      bottom: isPWA == true ? "0px" : "70px",
+      right: isPWA == true ? "0px" : "20px",
+      width: isPWA == true ? "100%" : "300px",
+      height: isPWA == true ? "100vh" : "400px",
       border: "1px solid #ccc",
       backgroundColor: "#f9f9f9",
       borderRadius: "10px",
@@ -68,7 +68,7 @@ export default function XMTPDemo() {
       left: "5px",
       background: "transparent",
       border: "none",
-      fontSize: "10px",
+      fontSize: isPWA == true ? "20px" : "10px",
       cursor: "pointer",
     },
     widgetHeader: {
@@ -86,11 +86,13 @@ export default function XMTPDemo() {
     conversationHeaderH4: {
       margin: "0px",
       padding: "4px",
+      fontSize: isPWA == true ? "20px" : "14px", // Increased font size
     },
     backButton: {
       border: "0px",
       background: "transparent",
       cursor: "pointer",
+      fontSize: isPWA == true ? "20px" : "14px", // Increased font size
     },
     widgetContent: {
       flexGrow: 1,
@@ -110,12 +112,12 @@ export default function XMTPDemo() {
       color: "#000",
       justifyContent: "center",
       border: "1px solid grey",
-      padding: "10px",
+      padding: isPWA == true ? "20px" : "10px",
       borderRadius: "5px",
     },
     widgetFooter: {
       padding: "5px",
-      fontSize: "12px",
+      fontSize: isPWA == true ? "20px" : "12px",
       textAlign: "center",
       display: "flex",
       alignItems: "center",
@@ -206,23 +208,25 @@ export default function XMTPDemo() {
 
   return (
     <>
-      <div
-        style={styles.floatingLogo as React.CSSProperties}
-        onClick={isOpen ? closeWidget : openWidget}
-        className={
-          "FloatingInbox " +
-          (isOpen ? "spin-clockwise" : "spin-counter-clockwise")
-        }
-      >
-        <SVGLogo
-          parentClass={"FloatingInbox"}
-          size={undefined}
-          theme={undefined}
-        />
-      </div>
+      {!isPWA && (
+        <div
+          style={styles.floatingLogo as React.CSSProperties}
+          onClick={isOpen ? closeWidget : openWidget}
+          className={
+            "FloatingInbox " +
+            (isOpen ? "spin-clockwise" : "spin-counter-clockwise")
+          }
+        >
+          <SVGLogo
+            parentClass={"FloatingInbox"}
+            size={undefined}
+            theme={undefined}
+          />
+        </div>
+      )}
       {isOpen && (
         <div
-          style={styles.Button as React.CSSProperties}
+          style={styles.uContainer as React.CSSProperties}
           className={"FloatingInbox" + (isOnNetwork ? "expanded" : "")}
         >
           {isConnected && (
@@ -268,6 +272,7 @@ export default function XMTPDemo() {
             )}
             {isConnected && isOnNetwork && client && (
               <ConversationContainer
+                isPWA={isPWA}
                 client={client}
                 selectedConversation={selectedConversation}
                 setSelectedConversation={setSelectedConversation}

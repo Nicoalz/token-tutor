@@ -7,32 +7,14 @@ import {
   Client,
 } from "@xmtp/react-sdk";
 import MessageItem from "./MessageItem";
-
-const styles = {
-  messagesContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    height: "100%",
-  },
-  messagesList: {
-    paddingLeft: "10px",
-    paddingRight: "10px",
-    margin: "0px",
-    alignItems: "flex-start",
-    flexGrow: 1,
-    display: "flex",
-    flexDirection: "column",
-    overflowY: "auto",
-  },
-};
-
 export const MessageContainer = ({
   conversation,
   client,
+  isPWA = false,
 }: {
   conversation: any;
   client: Client;
+  isPWA?: boolean;
 }) => {
   const messagesEndRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +34,26 @@ export const MessageContainer = ({
   useEffect(() => {
     setStreamedMessages([]);
   }, [conversation]);
+
+  const styles = {
+    messagesContainer: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      height: "100%",
+      fontSize: isPWA == true ? "1.2em" : ".9em", // Increased font size
+    },
+    messagesList: {
+      paddingLeft: isPWA == true ? "15px" : "10px",
+      paddingRight: isPWA == true ? "15px" : "10px",
+      margin: "0px",
+      alignItems: "flex-start",
+      flexGrow: 1,
+      display: "flex",
+      flexDirection: "column",
+      overflowY: "auto",
+    },
+  };
 
   const handleSendMessage = async (newMessage: any) => {
     if (!newMessage.trim()) {

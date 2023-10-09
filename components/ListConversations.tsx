@@ -11,11 +11,13 @@ export const ListConversations = ({
   searchTerm,
   selectConversation,
   onConversationFound,
+  isPWA = false,
 }: {
   client: Client;
   searchTerm: any;
   selectConversation: any;
   onConversationFound: any;
+  isPWA?: boolean;
 }) => {
   const { conversations } = useConversations();
   const [streamedConversations, setStreamedConversations] = useState<any[]>([]);
@@ -28,33 +30,33 @@ export const ListConversations = ({
       borderBottom: "1px solid #e0e0e0",
       cursor: "pointer",
       backgroundColor: "#f0f0f0",
-      padding: "10px",
       transition: "background-color 0.3s ease",
       ":hover": {
         backgroundColor: "lightblue",
       },
+      padding: isPWA == true ? "15px" : "10px",
     },
     conversationDetails: {
       display: "flex",
       flexDirection: "column",
       alignItems: "flex-start",
       width: "75%",
-      marginLeft: "10px",
+      marginLeft: isPWA == true ? "15px" : "10px",
       overflow: "hidden",
     },
     conversationName: {
-      fontSize: "16px",
+      fontSize: isPWA == true ? "20px" : "16px",
       fontWeight: "bold",
     },
     messagePreview: {
-      fontSize: "14px",
+      fontSize: isPWA == true ? "18px" : "14px",
       color: "#666",
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
     },
     conversationTimestamp: {
-      fontSize: "12px",
+      fontSize: isPWA == true ? "16px" : "12px",
       color: "#999",
       width: "25%",
       textAlign: "right",
