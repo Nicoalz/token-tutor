@@ -12,10 +12,11 @@ import {
 import { ChevronDownIcon, DoorOpen, User, WalletCards } from "lucide-react";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
+import { useRouter } from "next/navigation";
 
 export function LoginButton() {
   const { login, logout, ready, authenticated } = usePrivy();
-
+  const router = useRouter();
   const { wallets } = useWallets();
   const [wallet, setWallet] = useState("");
 
@@ -35,7 +36,9 @@ export function LoginButton() {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 mr-14">
             <DropdownMenuGroup className="flex flex-col gap-1">
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push(`/profile/${wallet}`)}
+              >
                 <User className="w-5 h-5 mr-2" />
                 Profile
               </DropdownMenuItem>
