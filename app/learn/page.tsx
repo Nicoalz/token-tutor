@@ -16,12 +16,14 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Learn() {
   const { signer } = useContext(Web3Context);
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [savedTutors, setSavedTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   const getAllTutors = async () => {
     setLoading(true);
@@ -103,6 +105,9 @@ export default function Learn() {
               <div
                 key={index}
                 className="bg-[#262938] flex flex-col p-5 rounded-lg shadow-sm gap-3 cursor-pointer hover:shadow-md transition"
+                onClick={() => {
+                  router.push(`/profile/${tutor.tutorAddress}`);
+                }}
               >
                 <h1 className="text-2xl font-bold">{tutor.name}</h1>
                 <p className="text-sm break-words">{tutor.description}</p>

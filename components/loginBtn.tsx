@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon, DoorOpen } from "lucide-react";
+import { ChevronDownIcon, DoorOpen, User, WalletCards } from "lucide-react";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 
@@ -33,16 +33,22 @@ export function LoginButton() {
               <ChevronDownIcon className="w-5 h-5 ml-2 bg-black/5 p-0.5 rounded-full" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuGroup>
-              <DropdownMenuItem>My Profile</DropdownMenuItem>
-              <DropdownMenuItem>My Courses</DropdownMenuItem>
+          <DropdownMenuContent className="w-56 mr-14">
+            <DropdownMenuGroup className="flex flex-col gap-1">
+              <DropdownMenuItem>
+                <User className="w-5 h-5 mr-2" />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <WalletCards className="w-5 h-5 mr-2" />
+                Inventory
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={logout}
                 className="font-bold text-destructive"
               >
+                <DoorOpen className="w-5 h-5 mr-2" />
                 Log out
-                <DoorOpen className="w-5 h-5 ml-2" />
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
