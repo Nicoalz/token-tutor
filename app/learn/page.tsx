@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "lucide-react";
 
 export default function Learn() {
   const { signer } = useContext(Web3Context);
@@ -30,12 +31,15 @@ export default function Learn() {
       signer
     );
     const tutorsFromContract = await contract.getAllTutors();
+    console.log(tutorsFromContract);
     const mappedTutors = tutorsFromContract.map((tutor: any) => {
       return {
-        tutorAddress: tutor[0],
-        mintedAmount: tutor[1].toString(),
-        maxMint: tutor[2].toString(),
-        hourPrice: tutor[3].toString(),
+        name: tutor[0],
+        description: tutor[1],
+        tutorAddress: tutor[2],
+        mintedAmount: tutor[3].toString(),
+        maxMint: tutor[4].toString(),
+        hourPrice: tutor[5].toString(),
       };
     });
     setTutors(mappedTutors);
@@ -96,10 +100,20 @@ export default function Learn() {
                 key={index}
                 className="bg-[#262938] flex flex-col p-5 rounded-lg shadow-sm gap-3 cursor-pointer hover:shadow-md transition"
               >
-                <h1 className="font-bold text-xl ">
-                  {tutor.tutorAddress.slice(0, 6) +
+                <h1 className="text-2xl font-bold">{tutor.name}</h1>
+                <p className="text-sm break-words">{tutor.description}</p>
+                <h1
+                  className="text-xs text-muted hover:underline"
+                  onClick={() => {
+                    window.open(
+                      `https://sepolia.etherscan.io/address/${tutor.tutorAddress}`
+                    );
+                  }}
+                >
+                  {tutor.tutorAddress.slice(0, 10) +
                     "..." +
-                    tutor.tutorAddress.slice(-4)}
+                    tutor.tutorAddress.slice(-10)}{" "}
+                  <Link className="w-3 h-3 inline-block" />
                 </h1>
                 <div className="flex justify-between">
                   <h2

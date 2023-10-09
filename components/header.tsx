@@ -16,7 +16,7 @@ export default function Header() {
       >
         <Logo width={100} height={100} />
       </Link>
-      <div className="flex gap-3">
+      <div className="flex gap-3 w-36 justify-between">
         {/* <Button variant={"link"} onClick={() => router.push("/learn")}>
           Learn
         </Button>

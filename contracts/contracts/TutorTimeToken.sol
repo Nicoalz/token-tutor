@@ -14,6 +14,7 @@ struct TutorTime {
 
 struct Tutor {
     string name;
+    string description;
     address tutor;
     uint mintedAmount;
     uint maxMint;
@@ -62,10 +63,12 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
     function setTutorPreferences(
         uint maxMint,
         uint price,
-        string memory name
+        string memory name,
+        string memory description
     ) public {
         Tutor storage tutorData = addressToTutor[msg.sender];
         tutorData.name = name;
+        tutorData.description = description;
         tutorData.tutor = msg.sender;
         tutorData.maxMint = maxMint;
         tutorData.hourPrice = price;

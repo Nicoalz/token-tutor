@@ -14,7 +14,7 @@ export const getSigner = async (wallet: ConnectedWallet) => {
 
 export const contracts = {
   TutorTimeToken: {
-    address: "0x517D338b6116aD0b2B04001B318eB2bb83cB8e71",
+    address: "0x471c2b715503c44be9921d4e41e38bee9ce8da9f",
     abi: [
       {
         inputs: [],
@@ -210,6 +210,16 @@ export const contracts = {
         name: "addressToTutor",
         outputs: [
           {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+          {
             internalType: "address",
             name: "tutor",
             type: "address",
@@ -400,6 +410,16 @@ export const contracts = {
         outputs: [
           {
             components: [
+              {
+                internalType: "string",
+                name: "name",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "description",
+                type: "string",
+              },
               {
                 internalType: "address",
                 name: "tutor",
@@ -597,6 +617,16 @@ export const contracts = {
             internalType: "uint256",
             name: "price",
             type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
           },
         ],
         name: "setTutorPreferences",
