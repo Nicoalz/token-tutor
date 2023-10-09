@@ -34,12 +34,9 @@ export function LoginButton() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>My Profile</DropdownMenuItem>
               <DropdownMenuItem>My Courses</DropdownMenuItem>
-              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={logout}
                 className="font-bold text-destructive"

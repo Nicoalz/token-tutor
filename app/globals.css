@@ -4,23 +4,23 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: #121534;
+    --foreground: white;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: #000212;
+    --popover-foreground: rgb(189, 189, 189);
 
-    --primary: black;
-    --primary-foreground: 210 40% 98%;
+    --primary: white;
+    --primary-foreground: white;
 
-    --secondary: 224, 91%, 65%;
+    --secondary: #6c7af0;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: rgb(131, 131, 131);
+    --muted-foreground: rgb(131, 131, 131);
 
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
@@ -29,8 +29,8 @@
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --input: #ffffff31;
+    --ring: #ffffff31;
 
     --radius: 0.5rem;
   }
@@ -76,11 +76,22 @@
 }
 
 body {
-  background: rgb(255, 255, 255);
-  background: linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(233, 238, 255, 1) 100%
+  background: rgb(20, 22, 48);
+  background: -moz-radial-gradient(
+    circle,
+    rgba(20, 22, 48, 1) 0%,
+    rgba(0, 2, 18, 1) 100%
   );
+  background: -webkit-radial-gradient(
+    circle,
+    rgba(20, 22, 48, 1) 0%,
+    rgba(0, 2, 18, 1) 100%
+  );
+  background: radial-gradient(
+    circle,
+    rgba(20, 22, 48, 1) 0%,
+    rgba(0, 2, 18, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#141630",endColorstr="#000212",GradientType=1);
   min-height: 100dvh;
 }

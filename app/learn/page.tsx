@@ -70,7 +70,8 @@ export default function Learn() {
   }, [signer]);
 
   return (
-    <main className="mx-32 my-10 p-10 bg-white/40 rounded-xl shadow-sm">
+    <main className="mx-32 my-10 p-10 bg-[#181c2a] rounded-xl shadow-sm">
+      <h1 className="text-3xl mb-10 font-bold">What are you looking for?</h1>
       <div className="flex gap-5 mb-6">
         <Input
           placeholder="Search for tutors..."
@@ -93,16 +94,16 @@ export default function Learn() {
             return (
               <div
                 key={index}
-                className="bg-white/30 flex flex-col p-5 border rounded-lg shadow-sm gap-3 cursor-pointer hover:shadow-md transition"
+                className="bg-[#262938] flex flex-col p-5 rounded-lg shadow-sm gap-3 cursor-pointer hover:shadow-md transition"
               >
-                <h1 className="font-bold text-xl text-secondary">
+                <h1 className="font-bold text-xl ">
                   {tutor.tutorAddress.slice(0, 6) +
                     "..." +
                     tutor.tutorAddress.slice(-4)}
                 </h1>
                 <div className="flex justify-between">
                   <h2
-                    className={`font-bold text-xs ${
+                    className={` text-xs ${
                       parseFloat(tutor.maxMint) -
                         parseFloat(tutor.mintedAmount) >
                       0
@@ -118,9 +119,9 @@ export default function Learn() {
                   </h2>
                 </div>
 
-                <h2 className="text-3xl text-gray-800  flex gap-2 ml-auto">
+                <h2 className="text-3xl font-thin  flex gap-2 ml-auto">
                   {parseFloat(tutor.hourPrice) / 10 ** 18}
-                  <EtherLogo width={20} height={20} />
+                  <EtherLogo width={20} height={5} />
                 </h2>
               </div>
             );
@@ -133,7 +134,7 @@ export default function Learn() {
             return (
               <div
                 key={index}
-                className="bg-white/30 flex flex-col p-5 border rounded-lg shadow-sm gap-3 hover:shadow-md transition"
+                className="bg-white/5 flex flex-col p-5 rounded-lg shadow-sm gap-3"
               >
                 <Skeleton className="w-8/12 h-[30px] rounded-full" />
                 <Skeleton className="w-2/12 h-[15px] rounded-full" />

@@ -9,7 +9,8 @@ export function EtherLogo({
 }) {
   return (
     <Image
-      src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg"
+      src="/eth.png"
+      className="object-contain"
       alt="Ethereum Logo"
       width={width}
       height={height}
