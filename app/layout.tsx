@@ -8,6 +8,7 @@ import { sepolia, mainnet } from "@wagmi/chains";
 import Web3Provider from "../components/web3-provider";
 import XMTP from "@/components/XMTP";
 import XMTPDemo from "@/components/XMTPDemo";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -35,6 +36,7 @@ export default function RootLayout({
             <Web3Provider>
               {children}
               <XMTPDemo />
+              <Toaster />
             </Web3Provider>
           </body>
         </XMTPProvider>
