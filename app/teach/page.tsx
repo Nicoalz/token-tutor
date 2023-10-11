@@ -239,7 +239,8 @@ export default function Profile() {
       <div className="bg-[#181c2a] w-full rounded-xl  p-8">
         <h1 className="mb-3">Your TimeTokens minted by students</h1>
         <div className="flex gap-10">
-          {!loading && tutorTimes.length > 0 ? (
+          {!loading &&
+            tutorTimes.length > 0 &&
             tutorTimes.map((timeToken, index) => {
               return (
                 <div
@@ -276,8 +277,8 @@ export default function Profile() {
                   )}
                 </div>
               );
-            })
-          ) : (
+            })}{" "}
+          {!loading && tutorTimes.length == 0 && (
             <p className="text-xs text-muted">
               No TimeTokens minted yet. <br></br>Students can mint your
               TimeTokens by visiting your profile page.

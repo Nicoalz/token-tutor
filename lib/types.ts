@@ -14,4 +14,5 @@ export type TimeToken = {
   price: string;
   mintedAt: string;
   redeemedAt: string;
+  address?: string;
 };

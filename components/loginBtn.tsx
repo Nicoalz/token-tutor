@@ -42,7 +42,7 @@ export function LoginButton() {
                 <User className="w-5 h-5 mr-2" />
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push(`/inventory`)}>
                 <WalletCards className="w-5 h-5 mr-2" />
                 Inventory
               </DropdownMenuItem>
