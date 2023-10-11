@@ -10,6 +10,7 @@ import { Copy } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import Avatar from "./avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 export default function Profile({ params }: { params: { address: string } }) {
   const { signer } = useContext(Web3Context);
@@ -18,6 +19,7 @@ export default function Profile({ params }: { params: { address: string } }) {
   const [userData, setUserData] = useState<any>({});
   const [image, setImage] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [isMe, setIsMe] = useState(true);
 
   const contract = new Contract(
     contracts.TutorTimeToken.address,
@@ -56,9 +58,15 @@ export default function Profile({ params }: { params: { address: string } }) {
     setUserData(data);
   };
 
+  const checkIsMe = async () => {
+    const address = await signer!.getAddress();
+    setIsMe(address === params.address);
+  };
+
   useEffect(() => {
     if (signer) {
       setLoading(true);
+      checkIsMe();
       getTutor();
       getUserData();
       setLoading(false);
@@ -89,8 +97,9 @@ export default function Profile({ params }: { params: { address: string } }) {
               </p>
             </div>
 
-            {tutor && tutor.maxMint != "0" && (
-              <div className="mt-8">
+            {tutor && tutor.maxMint != "0" && !isMe && (
+              <div className="mt-5">
+                <Separator className="my-3 bg-white/30 h-[1px]" />
                 <h1 className="text-lg font-semibold">
                   Book a session with {tutor.name}
                 </h1>
