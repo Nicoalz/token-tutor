@@ -13,6 +13,7 @@ import { useContext, useEffect, useState } from "react";
 export default function Profile() {
   const { signer } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
+  const [earned, setEarned] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [loadingSave, setLoadingSave] = useState(false);
   const { toast } = useToast();
@@ -24,7 +25,6 @@ export default function Profile() {
   );
 
   const getTutor = async () => {
-    setLoading(true);
     const tutorFromContract = await contract.addressToTutor(
       signer!.getAddress()
     );
@@ -36,12 +36,26 @@ export default function Profile() {
       maxMint: tutorFromContract[4].toString(),
       hourPrice: (tutorFromContract[5] / 10 ** 18).toString(),
     });
-    setLoading(false);
+  };
+
+  const getTutorTimes = async () => {
+    const tutorTimesFromContract = await contract.getAllTutorTimeForTutor(
+      signer!.getAddress()
+    );
+    const earnedETH = tutorTimesFromContract.reduce(
+      (acc: number, curr: any) => acc + parseFloat(curr[1]),
+      0
+    );
+    console.log(earnedETH);
+    setEarned(earnedETH);
   };
 
   useEffect(() => {
     if (signer) {
+      setLoading(true);
+      getTutorTimes();
       getTutor();
+      setLoading(false);
     }
   }, [signer]);
 
@@ -183,7 +197,15 @@ export default function Profile() {
         ) : (
           <h1 className="text-3xl font-bold">{tutor?.mintedAmount}</h1>
         )}
-        <span className="text-secondary text-xs ">TutorTokens</span>
+        <p className="mb-2 mt-7">
+          You <span className="text-secondary">earned</span>
+        </p>
+        {loading ? (
+          <Skeleton className="mb-2  w-full h-10" />
+        ) : (
+          <h1 className="text-3xl font-bold">{earned}</h1>
+        )}
+        <span className="text-secondary text-xs ">ETH</span>
       </main>
     </div>
   );

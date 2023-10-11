@@ -8,6 +8,7 @@ struct TutorTime {
     uint tokenId;
     address tutor;
     address student;
+    uint price;
     uint mintedAt;
     uint redeemedAt; // 0 -> not redeemed yet, timestamp -> redeemed (burnt)
 }
@@ -53,6 +54,7 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
             tokenId,
             tutor,
             msg.sender,
+            tutorData.hourPrice,
             block.timestamp,
             0
         );

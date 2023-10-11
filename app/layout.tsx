@@ -9,7 +9,12 @@ import Web3Provider from "../components/web3-provider";
 import XMTP from "@/components/XMTP";
 import XMTPDemo from "@/components/XMTPDemo";
 import { Toaster } from "@/components/ui/toaster";
+import { WagmiConfig, configureChains } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+import { PrivyWagmiConnector } from "@privy-io/wagmi-connector";
 const inter = Inter({ subsets: ["latin"] });
+
+const configureChainsConfig = configureChains([mainnet], [publicProvider()]);
 
 export default function RootLayout({
   children,
@@ -30,16 +35,18 @@ export default function RootLayout({
           },
         }}
       >
-        <XMTPProvider>
-          <body className={inter.className}>
-            <Header />
-            <Web3Provider>
-              {children}
-              <XMTPDemo />
-              <Toaster />
-            </Web3Provider>
-          </body>
-        </XMTPProvider>
+        <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
+          <XMTPProvider>
+            <body className={inter.className}>
+              <Header />
+              <Web3Provider>
+                {children}
+                <XMTPDemo />
+                <Toaster />
+              </Web3Provider>
+            </body>
+          </XMTPProvider>
+        </PrivyWagmiConnector>
       </PrivyProvider>
     </html>
   );
