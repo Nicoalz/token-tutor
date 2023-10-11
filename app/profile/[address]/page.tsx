@@ -9,6 +9,7 @@ import { Contract } from "ethers";
 import { Copy } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import Avatar from "./avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Profile({ params }: { params: { address: string } }) {
   const { signer } = useContext(Web3Context);
@@ -16,6 +17,7 @@ export default function Profile({ params }: { params: { address: string } }) {
   const [loadingMint, setLoadingMint] = useState(false);
   const [userData, setUserData] = useState<any>({});
   const [image, setImage] = useState<string>("");
+  const [loading, setLoading] = useState(true);
 
   const contract = new Contract(
     contracts.TutorTimeToken.address,
@@ -51,69 +53,88 @@ export default function Profile({ params }: { params: { address: string } }) {
 
   const getUserData = async () => {
     const data = await getUserOnChainData(params.address);
-    console.log(data);
     setUserData(data);
   };
 
   useEffect(() => {
     if (signer) {
+      setLoading(true);
       getTutor();
       getUserData();
+      setLoading(false);
     }
   }, [signer]);
 
   return (
     <main className="mx-32 my-10 p-10 bg-[#181c2a] rounded-xl shadow-sm flex gap-10">
       <div className="flex flex-col w-4/12">
-        <Avatar address={params.address} />
-        <h1 className="font-bold text-4xl mb-3">
-          {!userData.ENS
-            ? params.address.slice(0, 4) + "..." + params.address.slice(-4)
-            : userData.ENS}
-        </h1>
-        <div className="flex">
-          <Badge className="mr-2 text-white" variant="secondary">
-            {tutor && tutor.maxMint != "0" ? "Tutor" : "Learner"}
-          </Badge>
-          <p
-            onClick={() => navigator.clipboard.writeText(params.address)}
-            className="hover:opacity-80 bg-[#ababab] text-[#434343] text-xs p-1 px-2 rounded-md flex items-center cursor-pointer"
-          >
-            {params.address.slice(0, 6) + "..." + params.address.slice(-6)}
-            <Copy className="inline ml-2" size={12} />
-          </p>
-        </div>
-
-        {tutor && tutor.maxMint != "0" && (
-          <div className="mt-8">
-            <h1 className="text-lg font-semibold">
-              Book a session with {tutor.name}
+        {!loading && (
+          <div className="flex flex-col ">
+            <Avatar address={params.address} />
+            <h1 className="font-bold text-4xl mb-3">
+              {!userData.ENS
+                ? params.address.slice(0, 4) + "..." + params.address.slice(-4)
+                : userData.ENS}
             </h1>
-            <p className="text-xs font-light">{tutor.description}</p>
-            <div className="flex items-end mt-3">
-              <Button
-                disabled={
-                  parseFloat(tutor.maxMint) - parseFloat(tutor.mintedAmount) ==
-                  0
-                }
-                className="w-fit mr-3"
-                variant={"secondary"}
-                onClick={mint}
+            <div className="flex">
+              <Badge className="mr-2 text-white" variant="secondary">
+                {tutor && tutor.maxMint != "0" ? "Tutor" : "Learner"}
+              </Badge>
+              <p
+                onClick={() => navigator.clipboard.writeText(params.address)}
+                className="hover:opacity-80 bg-[#ababab] text-[#434343] text-xs p-1 px-2 rounded-md flex items-center cursor-pointer"
               >
-                {" "}
-                {loadingMint ? "Loading..." : "Mint"}{" "}
-              </Button>
-              <p className="text-muted text-xs">
-                {parseFloat(tutor.maxMint) - parseFloat(tutor.mintedAmount)}{" "}
-                left
+                {params.address.slice(0, 6) + "..." + params.address.slice(-6)}
+                <Copy className="inline ml-2" size={12} />
               </p>
             </div>
+
+            {tutor && tutor.maxMint != "0" && (
+              <div className="mt-8">
+                <h1 className="text-lg font-semibold">
+                  Book a session with {tutor.name}
+                </h1>
+                <p className="text-xs font-light">{tutor.description}</p>
+                <div className="flex items-end mt-3">
+                  <Button
+                    disabled={
+                      parseFloat(tutor.maxMint) -
+                        parseFloat(tutor.mintedAmount) ==
+                      0
+                    }
+                    className="w-fit mr-3"
+                    variant={"secondary"}
+                    onClick={mint}
+                  >
+                    {" "}
+                    {loadingMint ? "Loading..." : "Mint"}{" "}
+                  </Button>
+                  <p className="text-muted text-xs">
+                    {parseFloat(tutor.maxMint) - parseFloat(tutor.mintedAmount)}{" "}
+                    left
+                  </p>
+                  <p className="text-muted text-xs ml-3">
+                    {parseFloat(tutor.mintedAmount)} sold
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {loading && (
+          <div>
+            <Skeleton className="h-20 rounded-xl w-3/12 mb-3"></Skeleton>
+            <Skeleton className="h-12 rounded-xl"></Skeleton>
+            <Skeleton className="h-3 rounded-xl mt-2 w-6/12"></Skeleton>
+            <Skeleton className="h-3 rounded-xl mt-2 w-6/12"></Skeleton>
           </div>
         )}
       </div>
       <div className="w-8/12 flex flex-col overflow-hidden">
         <div className="flex gap-3 overflow-x-auto w-full">
-          {userData.neighbors &&
+          {!loading &&
+            userData.neighbors &&
             userData.neighbors.map(
               (
                 neighbor: {
@@ -161,11 +182,28 @@ export default function Profile({ params }: { params: { address: string } }) {
               }
             )}
 
-          {userData.neighbors && userData.neighbors.length === 0 && (
-            <p className="text-white mt-10 text-center w-full text-sm">
-              No social identities found
-            </p>
-          )}
+          {!loading &&
+            userData.neighbors &&
+            userData.neighbors.length === 0 && (
+              <p className="text-white mt-10 text-center w-full text-sm">
+                No social identities found
+              </p>
+            )}
+
+          {loading &&
+            ["1", "2", "3", "4", "5"].map((_, index) => {
+              return (
+                <div
+                  key={index}
+                  className="animate-pulse flex flex-col bg-white/10 w-52 p-3 rounded-xl"
+                >
+                  <Skeleton className="h-12 rounded-xl"></Skeleton>
+                  <Skeleton className="h-3 rounded-xl mt-2"></Skeleton>
+                  <Skeleton className="h-3 rounded-xl mt-2"></Skeleton>
+                  <Skeleton className="h-3 rounded-xl mt-2"></Skeleton>
+                </div>
+              );
+            })}
         </div>
       </div>
     </main>
