@@ -8,6 +8,7 @@ import { Web3Context } from "@/components/web3-provider";
 import { Tutor } from "@/lib/types";
 import { contracts } from "@/lib/utils";
 import { Contract } from "ethers";
+import { Loader2Icon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
 export default function Profile() {
@@ -181,9 +182,14 @@ export default function Profile() {
         </div>
         <Button
           onClick={saveTutor}
-          className="bg-secondary w-32 px-10 py-2 mt-10 rounded-md text-white font-bold"
+          disabled={loadingSave}
+          className="text-center bg-secondary w-32 px-10 py-2 mt-10 rounded-md text-white font-bold"
         >
-          Save
+          {loadingSave ? (
+            <Loader2Icon className="animate-spin inline" />
+          ) : (
+            "Save"
+          )}
         </Button>
       </main>
       <main className="w-3/12 p-10 bg-[#181c2a] rounded-xl shadow-sm flex flex-col items-center h-fit">

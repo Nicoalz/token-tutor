@@ -29,7 +29,7 @@ export default function Profile({ params }: { params: { address: string } }) {
     if (!tutor) return;
     setLoadingMint(true);
     const tx = await contract.safeMint(params.address, {
-      value: parseFloat(tutor!.hourPrice) * 10 ** 18,
+      value: (parseFloat(tutor!.hourPrice) * 10 ** 18).toString(),
     });
     await tx.wait();
     setLoadingMint(false);

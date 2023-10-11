@@ -48,6 +48,10 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
             msg.value >= tutorData.hourPrice,
             "TutorTimeToken: not enough ETH sent"
         );
+        require(
+            tutor != msg.sender,
+            "TutorTimeToken: tutor cannot mint his own time"
+        );
         uint tokenId = _nextTokenId++;
         addressToTutor[tutor].mintedAmount++;
         tokenData[tokenId] = TutorTime(
