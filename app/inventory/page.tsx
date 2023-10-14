@@ -53,6 +53,8 @@ export default function Inventory() {
       setLoading(true);
       getOwnedTokens();
       setLoading(false);
+    } else {
+      router.push("/");
     }
   }, [signer]);
 

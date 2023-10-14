@@ -76,8 +76,12 @@ export default function Learn() {
   };
 
   useEffect(() => {
-    if (signer) getAllTutors();
-  }, [signer]);
+    if (signer) {
+      getAllTutors();
+    } else {
+      router.push("/");
+    }
+  }, [router, signer]);
 
   return (
     <main className="mx-32 my-10 p-10 bg-[#181c2a] rounded-xl shadow-sm">

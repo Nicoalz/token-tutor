@@ -31,7 +31,7 @@ export default function RootLayout({
           appearance: {
             theme: "light",
             accentColor: "#676FFF",
-            logo: "/token-tutor.png",
+            logo: "/token-tutor-black.png",
           },
         }}
       >

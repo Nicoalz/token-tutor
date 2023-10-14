@@ -12,7 +12,7 @@ import Avatar from "./avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import Resume from "@/components/Resume";
-
+import { useRouter } from "next/navigation";
 export default function Profile({ params }: { params: { address: string } }) {
   const { signer } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
@@ -21,7 +21,7 @@ export default function Profile({ params }: { params: { address: string } }) {
   const [image, setImage] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [isMe, setIsMe] = useState(true);
-
+  const router = useRouter();
   const contract = new Contract(
     contracts.TutorTimeToken.address,
     contracts.TutorTimeToken.abi,
@@ -71,8 +71,10 @@ export default function Profile({ params }: { params: { address: string } }) {
       getTutor();
       getUserData();
       setLoading(false);
+    } else {
+      router.push("/");
     }
-  }, [signer]);
+  }, [signer, router]);
 
   return (
     <div className="mx-32 my-10 flex gap-10">

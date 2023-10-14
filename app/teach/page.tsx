@@ -11,7 +11,7 @@ import { contracts } from "@/lib/utils";
 import { Contract } from "ethers";
 import { Loader2Icon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
 export default function Profile() {
   const { signer } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
@@ -20,7 +20,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [loadingSave, setLoadingSave] = useState(false);
   const { toast } = useToast();
-
+  const router = useRouter();
   const contract = new Contract(
     contracts.TutorTimeToken.address,
     contracts.TutorTimeToken.abi,
@@ -78,8 +78,10 @@ export default function Profile() {
       getTutorTimes();
       getTutor();
       setLoading(false);
+    } else {
+      router.push("/");
     }
-  }, [signer]);
+  }, [router, signer]);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;

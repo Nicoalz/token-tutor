@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Loader2Icon } from "lucide-react";
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import { Web3Storage } from "web3.storage";
 import { createClient } from "@supabase/supabase-js";
+import { Skeleton } from "@/components/ui/skeleton";
 export default function Resume({ userAddress }: { userAddress: string }) {
   const [modalResumeOpen, setModalResumeOpen] = useState(false);
   const [messages, showMessage] = useReducer(
@@ -12,11 +13,38 @@ export default function Resume({ userAddress }: { userAddress: string }) {
   );
   const [files, setFiles] = useState([]) as any[];
   const [fileUploading, setFileUploading] = useState(false);
-
+  const [resumeURL, setResumeURL] = useState("");
   const supabaseClient = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_KEY!
   );
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        if (!userAddress) return;
+        const { data, error } = await supabaseClient
+          .from("token_tutor_mentor")
+          .select("*")
+          .eq("address", userAddress.toLowerCase())
+          .limit(1);
+        if (error) throw error;
+        const { address, resume_cid, resume_filename } = data[0];
+        if (
+          !resume_cid ||
+          !resume_filename ||
+          address !== userAddress.toLowerCase()
+        )
+          return;
+        const url = `https://${resume_cid}.ipfs.dweb.link/${resume_filename}`;
+        console.log({ url });
+        setResumeURL(url);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  }, [userAddress, fileUploading]);
 
   const client = new Web3Storage({
     token: process.env.NEXT_PUBLIC_WEB_STORAGE_KEY,
@@ -38,16 +66,21 @@ export default function Resume({ userAddress }: { userAddress: string }) {
     fileName: string;
   }) {
     if (!userAddress) return;
-    await supabaseClient.from("token_tutor_mentor").upsert(
-      [
-        {
-          address: userAddress.toLowerCase(),
-          resume_cid: cid,
-          resume_filename: fileName,
-        },
-      ],
-      { onConflict: "address" }
-    );
+    try {
+      const { error } = await supabaseClient.from("token_tutor_mentor").upsert(
+        [
+          {
+            address: userAddress.toLowerCase(),
+            resume_cid: cid,
+            resume_filename: fileName,
+          },
+        ],
+        { onConflict: "address" }
+      );
+      if (error) throw error;
+    } catch (error) {
+      console.log({ error });
+    }
   }
 
   async function handleSubmit(event: any) {
@@ -67,19 +100,23 @@ export default function Resume({ userAddress }: { userAddress: string }) {
     setFileUploading(false);
   }
 
-  const resumeURL =
-    "https://bafybeickuofa2qtign46hspdxuqtcl66in5qnvzr64q374rqq3w3zswwqi.ipfs.dweb.link/resume_sample_page-0001.jpg";
   return (
-    <main className="flex-col w-3/12 py-10 px-6 bg-[#181c2a] rounded-xl shadow-sm flex min-h-[32rem] items-center">
+    <main className="flex-col w-3/12 py-10 px-6 bg-[#181c2a] rounded-xl shadow-sm flex min-h-[32rem] items-center justify-between">
       <h2 className="text-3xl mb-4">Resume 📄</h2>
-      <Image
-        className="cursor-pointer"
-        onClick={() => setModalResumeOpen(true)}
-        src={resumeURL}
-        alt="resume"
-        width={250}
-        height={150}
-      />
+      {resumeURL ? (
+        <Image
+          unoptimized
+          className="cursor-pointer"
+          onClick={() => setModalResumeOpen(true)}
+          src={resumeURL}
+          alt="resume"
+          width={250}
+          height={150}
+        />
+      ) : (
+        <Skeleton className="h-56 rounded-xl mt-2 w-11/12" />
+      )}
+
       {/* <Button
         onClick={saveTutor}
         disabled={loadingSave}
@@ -114,19 +151,20 @@ export default function Resume({ userAddress }: { userAddress: string }) {
           )}
         </Button>
       </form>
-      {modalResumeOpen && (
+      {modalResumeOpen && resumeURL && (
         <div
           onClick={() => setModalResumeOpen(false)}
           className="cursor-pointer absolute w-full h-full top-0 left-0 bg-black/50 flex justify-center items-center"
         >
-          <Image src={resumeURL} alt="resume" width={500} height={800} />
+          <Image
+            unoptimized
+            src={resumeURL}
+            alt="resume"
+            width={500}
+            height={800}
+          />
         </div>
       )}
-      <div id="output">
-        {messages.map((m: any, i: any) => (
-          <div key={m + i}>{m}</div>
-        ))}
-      </div>
     </main>
   );
 }
