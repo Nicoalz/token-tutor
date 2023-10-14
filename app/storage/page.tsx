@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useReducer } from "react";
 import { Web3Storage } from "web3.storage";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, } from "@supabase/supabase-js";
 
 export default function Home() {
   const [messages, showMessage] = useReducer(
@@ -73,12 +73,6 @@ export default function Home() {
         />
         <input type="submit" value="Submit" id="submit" />
       </form>
-      <div id="output">
-        &gt; ⁂ waiting for form submission...
-        {messages.map((m: any, i: any) => (
-          <div key={m + i}>{m}</div>
-        ))}
-      </div>
     </>
   );
 }

@@ -4,18 +4,23 @@ import { Loader2Icon } from "lucide-react";
 import React, { useState, useReducer } from "react";
 import { Web3Storage } from "web3.storage";
 import { createClient } from "@supabase/supabase-js";
-export default function Resume() {
+export default function Resume({ userAddress }: { userAddress: string }) {
   const [modalResumeOpen, setModalResumeOpen] = useState(false);
   const [messages, showMessage] = useReducer(
     (msgs: any, m: any) => msgs.concat(m),
     []
   );
   const [files, setFiles] = useState([]) as any[];
+  const [fileUploading, setFileUploading] = useState(false);
 
   const supabaseClient = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_KEY!
   );
+
+  const client = new Web3Storage({
+    token: process.env.NEXT_PUBLIC_WEB_STORAGE_KEY,
+  });
 
   function showLink(url: string) {
     showMessage(
@@ -25,36 +30,41 @@ export default function Resume() {
     );
   }
 
+  async function upsertToSupabase({
+    cid,
+    fileName,
+  }: {
+    cid: string;
+    fileName: string;
+  }) {
+    if (!userAddress) return;
+    await supabaseClient.from("token_tutor_mentor").upsert(
+      [
+        {
+          address: userAddress.toLowerCase(),
+          resume_cid: cid,
+          resume_filename: fileName,
+        },
+      ],
+      { onConflict: "address" }
+    );
+  }
+
   async function handleSubmit(event: any) {
+    if (!userAddress) return;
+    setFileUploading(true);
     // don't reload the page!
     event.preventDefault();
-
-    showMessage("> 📦 creating web3.storage client");
-    const client = new Web3Storage({
-      token: process.env.NEXT_PUBLIC_WEB_STORAGE_KEY,
-    });
-
-    showMessage(
-      "> 🤖 chunking and hashing the files (in your browser!) to calculate the Content ID"
-    );
-    const cid = await client.put(files, {
-      onRootCidReady: (localCid: string) => {
-        showMessage(`> 🔑 locally calculated Content ID: ${localCid} `);
-        showMessage("> 📡 sending files to web3.storage ");
-      },
-      onStoredChunk: (bytes: number) =>
-        showMessage(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`),
-    });
+    const fileName = files[0].name;
+    const cid = await client.put(files);
+    console.log({ cid });
     showMessage(`> ✅ web3.storage now hosting ${cid}`);
     showLink(`https://dweb.link/ipfs/${cid}`);
-
-    showMessage("> 📡 fetching the list of all unique uploads on this account");
-    let totalBytes = 0;
-    for await (const upload of client.list()) {
-      showMessage(`> 📄 ${upload.cid}  ${upload.name}`);
-      totalBytes += upload.dagSize || 0;
-    }
-    showMessage(`> ⁂ ${totalBytes.toLocaleString()} bytes stored!`);
+    await upsertToSupabase({
+      cid,
+      fileName,
+    });
+    setFileUploading(false);
   }
 
   const resumeURL =
@@ -78,7 +88,7 @@ export default function Resume() {
         {loadingSave ? <Loader2Icon className="animate-spin inline" /> : "Save"}
       </Button> */}
       <form
-        className=" w-full mt-2"
+        className="flex items-center flex-col w-full mt-2"
         id="upload-form"
         onSubmit={handleSubmit}
       >
@@ -88,7 +98,7 @@ export default function Resume() {
           name="fileList"
           onChange={(e) => setFiles(e.target.files)}
           required
-          style={{ width: "100%", height: "30px" }} // Adjust width and height as needed
+          style={{ width: "100%", height: "30px" }}
         />
 
         <Button
@@ -97,7 +107,11 @@ export default function Resume() {
           value="Submit"
           id="submit"
         >
-          Change
+          {fileUploading ? (
+            <Loader2Icon className="animate-spin inline" />
+          ) : (
+            "Change"
+          )}
         </Button>
       </form>
       {modalResumeOpen && (
@@ -108,6 +122,11 @@ export default function Resume() {
           <Image src={resumeURL} alt="resume" width={500} height={800} />
         </div>
       )}
+      <div id="output">
+        {messages.map((m: any, i: any) => (
+          <div key={m + i}>{m}</div>
+        ))}
+      </div>
     </main>
   );
 }

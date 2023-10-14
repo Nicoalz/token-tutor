@@ -223,7 +223,7 @@ export default function Profile({ params }: { params: { address: string } }) {
           </div>
         </div>
       </main>
-      <Resume />
+      <Resume userAddress={params.address} />
     </div>
   );
 }
