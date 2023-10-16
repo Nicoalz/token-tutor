@@ -122,14 +122,6 @@ export default function Resume({
       ) : (
         <Skeleton className="h-56 rounded-xl mt-2 w-11/12" />
       )}
-
-      {/* <Button
-        onClick={saveTutor}
-        disabled={loadingSave}
-        className="text-center bg-secondary w-32 px-10 py-2 mt-10 rounded-md text-white font-bold"
-      >
-        {loadingSave ? <Loader2Icon className="animate-spin inline" /> : "Save"}
-      </Button> */}
       {isMe && (
         <form
           className="flex items-center flex-col w-full mt-2"
@@ -142,8 +134,18 @@ export default function Resume({
             name="fileList"
             onChange={(e) => setFiles(e.target.files)}
             required
-            style={{ width: "100%", height: "30px" }}
+            className="hidden"
           />
+          <label
+            htmlFor="filepicker"
+            className={`text-center w-32 p-2 cursor-pointer rounded-md text-white ${
+              files && files.length > 0 ? "bg-[#6b6b6b]" : " bg-secondary"
+            }`}
+          >
+            {files && files.length > 0
+              ? files[0].name.slice(0, 8) + "..."
+              : "Choose a file"}
+          </label>
 
           <Button
             className="text-center bg-secondary w-32 px-10 py-2 mt-10 rounded-md text-white font-bold"
