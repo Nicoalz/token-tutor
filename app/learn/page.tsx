@@ -5,7 +5,6 @@ import { Web3Context } from "../../components/web3-provider";
 import { Contract } from "ethers";
 import { contracts } from "@/lib/utils";
 import { Tutor } from "@/lib/types";
-import { EtherLogo } from "@/components/etherLogo";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -148,7 +147,7 @@ export default function Learn() {
 
                 <h2 className="text-3xl font-thin  flex gap-2 ml-auto">
                   {parseFloat(tutor.hourPrice) / 10 ** 18}
-                  <EtherLogo width={20} height={5} />
+                  USDC
                 </h2>
               </div>
             );

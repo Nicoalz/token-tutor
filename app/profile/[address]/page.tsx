@@ -13,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import Resume from "@/components/Resume";
 import { useRouter } from "next/navigation";
-import { getApePriceEth } from "@/lib/the-graph-uniswap-ape-price";
+import { getApePrice } from "@/lib/the-graph-uniswap-ape-price";
 import {
   Select,
   SelectContent,
@@ -30,8 +30,8 @@ export default function Profile({ params }: { params: { address: string } }) {
   const [image, setImage] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [isMe, setIsMe] = useState(true);
-  const [isPriceETH, setIsPriceETH] = useState(true);
-  const [APEvsETHPrice, setAPEvsETHPrice] = useState<number>(0);
+  const [isPriceUSDC, setIsPriceUSDC] = useState(true);
+  const [apePrice, setApePrice] = useState<number>(0);
   const router = useRouter();
   const contract = new Contract(
     contracts.TutorTimeToken.address,
@@ -89,10 +89,9 @@ export default function Profile({ params }: { params: { address: string } }) {
 
   useEffect(() => {
     async function getAPEvsETHPrice() {
-      const apePrice = await getApePriceEth();
+      const apePrice = await getApePrice();
       if (!apePrice) return;
-      console.log({apePrice})
-      setAPEvsETHPrice(apePrice);
+      setApePrice(apePrice);
     }
     getAPEvsETHPrice();
   }, []);
@@ -137,32 +136,28 @@ export default function Profile({ params }: { params: { address: string } }) {
                   <div className="flex items-center mt-4">
                     <p className="mr-4">
                       {`Price is ${
-                        isPriceETH
+                        isPriceUSDC
                           ? tutor.hourPrice
-                          : (
-                              parseFloat(tutor.hourPrice) / APEvsETHPrice
-                            ).toFixed(2)
+                          : (parseFloat(tutor.hourPrice) * apePrice).toFixed(2)
                       }
                     `}
                     </p>
                     <div className="w-[75px]">
                       <Select
-                        // onValueChange={field.onChange}
-                        // defaultValue={field.value}
                         onValueChange={(e) => {
-                          if (e === "ETH") {
-                            setIsPriceETH(true);
+                          if (e === "USDC") {
+                            setIsPriceUSDC(true);
                           } else {
-                            setIsPriceETH(false);
+                            setIsPriceUSDC(false);
                           }
                         }}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="ETH" />
+                          <SelectValue placeholder="USDC" />
                         </SelectTrigger>
 
                         <SelectContent>
-                          <SelectItem value="ETH">ETH</SelectItem>
+                          <SelectItem value="USDC">USDC</SelectItem>
                           <SelectItem value="APE">APE</SelectItem>
                         </SelectContent>
                       </Select>
