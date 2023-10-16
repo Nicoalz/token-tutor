@@ -25,7 +25,7 @@ export function LoginButton() {
   }, [wallets]);
 
   return (
-    <>
+    <div className="w-44 flex justify-end">
       {ready && authenticated && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -63,6 +63,6 @@ export function LoginButton() {
         </Button>
       )}
       {!ready && <Loading />}
-    </>
+    </div>
   );
 }

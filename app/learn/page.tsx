@@ -145,9 +145,9 @@ export default function Learn() {
                   </h2>
                 </div>
 
-                <h2 className="text-3xl font-thin  flex gap-2 ml-auto">
+                <h2 className="text-3xl font-bold  flex gap-2 ml-auto items-center">
                   {parseFloat(tutor.hourPrice) / 10 ** 18}
-                  USDC
+                  <span className="text-lg font-thin">USDC</span>
                 </h2>
               </div>
             );

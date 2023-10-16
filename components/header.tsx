@@ -16,7 +16,7 @@ export default function Header() {
       >
         <Logo width={100} height={100} />
       </Link>
-      <div className="flex gap-3 w-36 justify-between">
+      <div className="flex w-56 justify-between">
         {/* <Button variant={"link"} onClick={() => router.push("/learn")}>
           Learn
         </Button>
@@ -35,6 +35,12 @@ export default function Header() {
           href="/teach"
         >
           <p>Teach</p>
+        </Link>
+        <Link
+          className="text-primary underline-offset-4 hover:underline hover:text-secondary"
+          href="/trade"
+        >
+          <p>Trade</p>
         </Link>
       </div>
 
