@@ -5,7 +5,13 @@ import React, { useState, useReducer, useEffect } from "react";
 import { Web3Storage } from "web3.storage";
 import { createClient } from "@supabase/supabase-js";
 import { Skeleton } from "@/components/ui/skeleton";
-export default function Resume({ userAddress }: { userAddress: string }) {
+export default function Resume({
+  userAddress,
+  isMe,
+}: {
+  userAddress: string;
+  isMe: boolean;
+}) {
   const [modalResumeOpen, setModalResumeOpen] = useState(false);
   const [messages, showMessage] = useReducer(
     (msgs: any, m: any) => msgs.concat(m),
@@ -84,7 +90,7 @@ export default function Resume({ userAddress }: { userAddress: string }) {
   }
 
   async function handleSubmit(event: any) {
-    if (!userAddress) return;
+    if (!userAddress || !isMe) return;
     setFileUploading(true);
     // don't reload the page!
     event.preventDefault();
@@ -124,33 +130,36 @@ export default function Resume({ userAddress }: { userAddress: string }) {
       >
         {loadingSave ? <Loader2Icon className="animate-spin inline" /> : "Save"}
       </Button> */}
-      <form
-        className="flex items-center flex-col w-full mt-2"
-        id="upload-form"
-        onSubmit={handleSubmit}
-      >
-        <input
-          type="file"
-          id="filepicker"
-          name="fileList"
-          onChange={(e) => setFiles(e.target.files)}
-          required
-          style={{ width: "100%", height: "30px" }}
-        />
-
-        <Button
-          className="text-center bg-secondary w-32 px-10 py-2 mt-10 rounded-md text-white font-bold"
-          type="submit"
-          value="Submit"
-          id="submit"
+      {isMe && (
+        <form
+          className="flex items-center flex-col w-full mt-2"
+          id="upload-form"
+          onSubmit={handleSubmit}
         >
-          {fileUploading ? (
-            <Loader2Icon className="animate-spin inline" />
-          ) : (
-            "Change"
-          )}
-        </Button>
-      </form>
+          <input
+            type="file"
+            id="filepicker"
+            name="fileList"
+            onChange={(e) => setFiles(e.target.files)}
+            required
+            style={{ width: "100%", height: "30px" }}
+          />
+
+          <Button
+            className="text-center bg-secondary w-32 px-10 py-2 mt-10 rounded-md text-white font-bold"
+            type="submit"
+            value="Submit"
+            id="submit"
+          >
+            {fileUploading ? (
+              <Loader2Icon className="animate-spin inline" />
+            ) : (
+              "Change"
+            )}
+          </Button>
+        </form>
+      )}
+
       {modalResumeOpen && resumeURL && (
         <div
           onClick={() => setModalResumeOpen(false)}

@@ -13,6 +13,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import Resume from "@/components/Resume";
 import { useRouter } from "next/navigation";
+import { getApePriceEth } from "@/lib/the-graph-uniswap-ape-price";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export default function Profile({ params }: { params: { address: string } }) {
   const { signer } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
@@ -21,6 +30,8 @@ export default function Profile({ params }: { params: { address: string } }) {
   const [image, setImage] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [isMe, setIsMe] = useState(true);
+  const [isPriceETH, setIsPriceETH] = useState(true);
+  const [APEvsETHPrice, setAPEvsETHPrice] = useState<number>(0);
   const router = useRouter();
   const contract = new Contract(
     contracts.TutorTimeToken.address,
@@ -76,6 +87,16 @@ export default function Profile({ params }: { params: { address: string } }) {
     }
   }, [signer, router]);
 
+  useEffect(() => {
+    async function getAPEvsETHPrice() {
+      const apePrice = await getApePriceEth();
+      if (!apePrice) return;
+      console.log({apePrice})
+      setAPEvsETHPrice(apePrice);
+    }
+    getAPEvsETHPrice();
+  }, []);
+
   return (
     <div className="mx-32 my-10 flex gap-10">
       <main className="w-9/12 p-10 bg-[#181c2a] rounded-xl shadow-sm flex gap-10 min-h-[32rem]">
@@ -111,7 +132,42 @@ export default function Profile({ params }: { params: { address: string } }) {
                   <h1 className="text-lg font-semibold">
                     Book a session with {tutor.name}
                   </h1>
+
                   <p className="text-xs font-light">{tutor.description}</p>
+                  <div className="flex items-center mt-4">
+                    <p className="mr-4">
+                      {`Price is ${
+                        isPriceETH
+                          ? tutor.hourPrice
+                          : (
+                              parseFloat(tutor.hourPrice) / APEvsETHPrice
+                            ).toFixed(2)
+                      }
+                    `}
+                    </p>
+                    <div className="w-[75px]">
+                      <Select
+                        // onValueChange={field.onChange}
+                        // defaultValue={field.value}
+                        onValueChange={(e) => {
+                          if (e === "ETH") {
+                            setIsPriceETH(true);
+                          } else {
+                            setIsPriceETH(false);
+                          }
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="ETH" />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                          <SelectItem value="ETH">ETH</SelectItem>
+                          <SelectItem value="APE">APE</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                   <div className="flex items-end mt-3">
                     <Button
                       disabled={
@@ -225,7 +281,7 @@ export default function Profile({ params }: { params: { address: string } }) {
           </div>
         </div>
       </main>
-      <Resume userAddress={params.address} />
+      <Resume isMe={isMe} userAddress={params.address} />
     </div>
   );
 }
