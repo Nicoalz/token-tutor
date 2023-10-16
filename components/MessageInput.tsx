@@ -34,6 +34,8 @@ export const MessageInput = ({
       border: "1px solid #ccc",
       borderRadius: "5px",
       fontSize: isPWA == true ? "1.2em" : ".9em", // Increased font size
+      color: "white",
+      backgroundColor: "#090B20"
     },
     sendButton: {
       padding: "5px 10px",

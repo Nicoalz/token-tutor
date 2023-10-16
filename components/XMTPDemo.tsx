@@ -3,8 +3,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { Client, useClient } from "@xmtp/react-sdk";
 import { ConversationContainer } from "./ConversationContainer";
 import { Signer } from "ethers";
-
+import { getEnv, storeKeys, loadKeys, wipeKeys } from "@/lib/xmtp";
 import { Web3Context } from "./web3-provider";
+import { Button } from "./ui/button";
 export default function XMTPDemo({ isPWA = false }: { isPWA?: boolean }) {
   const { signer: wallet } = useContext(Web3Context);
   const isBrowser = typeof window !== "undefined";
@@ -53,8 +54,7 @@ export default function XMTPDemo({ isPWA = false }: { isPWA?: boolean }) {
       right: isPWA == true ? "0px" : "20px",
       width: isPWA == true ? "100%" : "300px",
       height: isPWA == true ? "100vh" : "400px",
-      border: "1px solid #ccc",
-      backgroundColor: "#f9f9f9",
+      backgroundColor: "#181C2A",
       borderRadius: "10px",
       boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
       zIndex: "1000",
@@ -65,7 +65,7 @@ export default function XMTPDemo({ isPWA = false }: { isPWA?: boolean }) {
     logoutBtn: {
       position: "absolute",
       top: "10px",
-      left: "5px",
+      left: "15px",
       background: "transparent",
       border: "none",
       fontSize: isPWA == true ? "20px" : "10px",
@@ -160,8 +160,11 @@ export default function XMTPDemo({ isPWA = false }: { isPWA?: boolean }) {
 
   //Initialize XMTP
   const initXmtpWithKeys = async () => {
+    console.log("entra2");
     if (!signer) return;
+    console.log("entra");
     const address = await getAddress(signer);
+    console.log({ address });
     let keys = loadKeys(address);
     if (!keys) {
       keys = (await Client.getKeys(signer, {
@@ -171,15 +174,21 @@ export default function XMTPDemo({ isPWA = false }: { isPWA?: boolean }) {
       })) as any;
       storeKeys(address, keys);
     }
+    console.log({ keys });
     if (!keys) return;
     setLoading(true);
-    await initialize({
-      keys,
-      options: {
-        env: "production",
-      },
-      signer,
-    });
+    try {
+      await initialize({
+        keys,
+        options: {
+          env: "production",
+        },
+        signer,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    console.log("entra4");
   };
 
   const openWidget = () => {
@@ -265,9 +274,9 @@ export default function XMTPDemo({ isPWA = false }: { isPWA?: boolean }) {
             )}
             {isConnected && !isOnNetwork && (
               <div style={styles.xmtpContainer}>
-                <button style={styles.btnXmtp} onClick={initXmtpWithKeys}>
+                <Button variant={"secondary"} onClick={initXmtpWithKeys}>
                   Connect to XMTP
-                </button>
+                </Button>
               </div>
             )}
             {isConnected && isOnNetwork && client && (
@@ -353,30 +362,3 @@ function SVGLogo({
     </>
   );
 }
-const ENCODING = "binary";
-
-export const getEnv = () => {
-  // "dev" | "production" | "local"
-  return typeof process !== "undefined" && process.env.REACT_APP_XMTP_ENV
-    ? process.env.REACT_APP_XMTP_ENV
-    : "production";
-};
-export const buildLocalStorageKey = (walletAddress: string | undefined) => {
-  return walletAddress ? `xmtp:${getEnv()}:keys:${walletAddress}` : "";
-};
-
-export const loadKeys = (walletAddress: string | undefined) => {
-  const val = localStorage.getItem(buildLocalStorageKey(walletAddress));
-  return val ? Buffer.from(val, ENCODING) : null;
-};
-
-export const storeKeys = (walletAddress: string | undefined, keys: any) => {
-  localStorage.setItem(
-    buildLocalStorageKey(walletAddress),
-    Buffer.from(keys).toString(ENCODING)
-  );
-};
-
-export const wipeKeys = (walletAddress: string | undefined) => {
-  localStorage.removeItem(buildLocalStorageKey(walletAddress));
-};

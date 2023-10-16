@@ -134,13 +134,13 @@ export default function Profile({ params }: { params: { address: string } }) {
 
                   <p className="text-xs font-light">{tutor.description}</p>
                   <div className="flex items-center mt-4">
-                    <p className="mr-4">
-                      {`Price is ${
-                        isPriceUSDC
+                    <p className="">
+                      Price is
+                      <span className="text-xl font-bold mx-2">
+                        {isPriceUSDC
                           ? tutor.hourPrice
-                          : (parseFloat(tutor.hourPrice) * apePrice).toFixed(2)
-                      }
-                    `}
+                          : (parseFloat(tutor.hourPrice) * apePrice).toFixed(2)}
+                      </span>
                     </p>
                     <div className="w-[75px]">
                       <Select

@@ -14,7 +14,7 @@ const MessageItem = ({
 }) => {
   const styles = {
     messageContent: {
-      backgroundColor: "lightblue",
+      //backgroundColor: "#007AFE",
       padding: isPWA == true ? "10px 20px" : "5px 10px",
       alignSelf: "flex-start",
       textAlign: "left",
@@ -50,7 +50,7 @@ const MessageItem = ({
     },
     timeStamp: {
       fontSize: isPWA == true ? "12px" : "8px",
-      color: "grey",
+      color: "white",
     },
   };
 
@@ -87,7 +87,10 @@ const MessageItem = ({
       }
       key={message.id}
     >
-      <div style={styles.messageContent as React.CSSProperties}>
+      <div
+        className={isSender ? "bg-[#007AFE]" : "bg-[#333333]"}
+        style={styles.messageContent as React.CSSProperties}
+      >
         {renderMessage(message)}
         <div style={styles.footer}>
           <span style={styles.timeStamp}>

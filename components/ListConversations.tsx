@@ -29,7 +29,7 @@ export const ListConversations = ({
       alignItems: "center",
       borderBottom: "1px solid #e0e0e0",
       cursor: "pointer",
-      backgroundColor: "#f0f0f0",
+      backgroundColor: "#181C2A",
       transition: "background-color 0.3s ease",
       ":hover": {
         backgroundColor: "lightblue",

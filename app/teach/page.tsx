@@ -173,7 +173,7 @@ export default function Profile() {
             <div className="flex gap-10">
               <div className="w-full">
                 <p className="mb-1 font-light">
-                  Hourly rate in <span className="text-secondary">ETH</span>
+                  Hourly rate in <span className="text-secondary">USDC</span>
                 </p>
                 {loading ? (
                   <Skeleton className="mb-2 w-full h-9" />

@@ -36,6 +36,7 @@ export const ConversationContainer = ({
       margin: "0",
       listStyle: "none",
       overflowY: "scroll",
+      backgroundColor: "#181C2A",
     },
     smallLabel: {
       fontSize: isPWA == true ? "1.5em" : ".9em", // Increased font size
@@ -53,6 +54,7 @@ export const ConversationContainer = ({
       boxSizing: "border-box",
       border: "0px solid #ccc",
       fontSize: isPWA == true ? "1.2em" : ".9em", // Increased font size
+      backgroundColor: "#090B20",
     },
   };
   const isValidEthereumAddress = (address: string) => {
