@@ -12,6 +12,7 @@ import { Contract } from "ethers";
 import { Loader2Icon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Textarea } from "@/components/ui/textarea";
 export default function Profile() {
   const { signer } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
@@ -33,11 +34,12 @@ export default function Profile() {
     );
     setTutor({
       name: tutorFromContract[0],
-      description: tutorFromContract[1],
+      title: tutorFromContract[1],
       tutorAddress: tutorFromContract[2],
       mintedAmount: tutorFromContract[3].toString(),
       maxMint: tutorFromContract[4].toString(),
       hourPrice: (tutorFromContract[5] / 10 ** 18).toString(),
+      description: tutorFromContract[6],
     });
   };
 
@@ -52,21 +54,19 @@ export default function Profile() {
     const tutorTimesFromContract = await contract.getAllTutorTimeForTutor(
       signer!.getAddress()
     );
-
-    setTutorTimes(
-      tutorTimesFromContract.map((token: any) => {
-        return {
-          tokenId: token[0],
-          tutor: token[1],
-          student: token[2],
-          price: (token[3] / 10 ** 18).toString(),
-          mintedAt: token[4],
-          redeemedAt: token[5],
-        };
-      })
-    );
-    const earnedETH = tutorTimesFromContract.reduce(
-      (acc: number, curr: any) => acc + parseFloat(curr[1]),
+    const formatted = tutorTimesFromContract.map((token: any) => {
+      return {
+        tokenId: token[0],
+        tutor: token[1],
+        student: token[2],
+        price: (token[3] / 10 ** 18).toString(),
+        mintedAt: token[4],
+        redeemedAt: token[5],
+      };
+    });
+    setTutorTimes(formatted);
+    const earnedETH = formatted.reduce(
+      (acc: number, curr: any) => acc + parseFloat(curr.price),
       0
     );
     setEarned(earnedETH);
@@ -96,6 +96,7 @@ export default function Profile() {
       if (!signer) return;
       if (
         !tutor.maxMint ||
+        !tutor.title ||
         !tutor.description ||
         !tutor.hourPrice ||
         !tutor.name
@@ -106,6 +107,7 @@ export default function Profile() {
         parseFloat(tutor!.maxMint),
         (parseFloat(tutor!.hourPrice) * 10 ** 18).toString(),
         tutor!.name,
+        tutor!.title,
         tutor!.description
       );
       toast({
@@ -154,20 +156,35 @@ export default function Profile() {
               </div>
               <div className="w-full">
                 <p className="mb-1 font-light">
-                  What do you{" "}
-                  <span className="text-secondary">bring to the table</span>
+                  What is your <span className="text-secondary">expertise</span>
                 </p>
                 {loading ? (
                   <Skeleton className="mb-2 w-full h-9" />
                 ) : (
                   <Input
-                    value={tutor?.description}
+                    value={tutor?.title}
                     onChange={handleInputChange}
-                    name="description"
-                    placeholder="Description"
+                    name="title"
+                    placeholder="Title"
                   />
                 )}
               </div>
+            </div>
+            <div className="w-full">
+              <p className="mb-1 font-light">
+                Describe <span className="text-secondary">what you do</span>
+              </p>
+              {loading ? (
+                <Skeleton className="mb-2 w-full h-9" />
+              ) : (
+                <Textarea
+                  value={tutor?.description}
+                  onChange={handleInputChange}
+                  name="description"
+                  placeholder="Description"
+                  className="h-10"
+                />
+              )}
             </div>
 
             <div className="flex gap-10">
@@ -235,7 +252,7 @@ export default function Profile() {
           ) : (
             <h1 className="text-3xl font-bold">{earned}</h1>
           )}
-          <span className="text-secondary text-xs ">ETH</span>
+          <span className="text-secondary text-xs ">USDC</span>
         </main>
       </div>
       <div className="bg-[#181c2a] w-full rounded-xl  p-8">
@@ -247,12 +264,14 @@ export default function Profile() {
               return (
                 <div
                   key={index}
-                  className="flex flex-col bg-white/10 w-52 p-3 rounded-xl"
+                  className={`flex flex-col bg-white/10 w-52 p-3 rounded-xl ${
+                    timeToken.redeemedAt ? "opacity-50" : ""
+                  }}`}
                 >
                   <p className="text-sm font-light">
                     Value:{" "}
                     <span className="text-secondary">
-                      {timeToken.price} ETH
+                      {timeToken.price} USDC
                     </span>
                   </p>
                   <p className="text-xs font-light text-muted ">
@@ -262,8 +281,8 @@ export default function Profile() {
                     ).toLocaleString()}
                   </p>
                   {timeToken.redeemedAt ? (
-                    <p className="text-xs font-light text-muted ">
-                      Redeemed at:{" "}
+                    <p className="text-xs text-muted font-bold">
+                      Redeemed at<br></br>
                       {new Date(
                         parseFloat(timeToken.redeemedAt.toString()) * 1000
                       ).toLocaleString()}

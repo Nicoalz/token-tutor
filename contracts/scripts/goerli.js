@@ -14,7 +14,7 @@ async function main() {
   // console.log("MockUSDC deployed to:", await MockUSDC.getAddress());
 
   const TutorTimeToken = await hre.ethers.deployContract("TutorTimeToken", [
-    "0x3DaF4DA079888E449e48C509ef68e5122cB45141",
+    "0x328507DC29C95c170B56a1b3A758eB7a9E73455c", // APE TOKEN GOERLI
   ]);
 
   await TutorTimeToken.waitForDeployment();

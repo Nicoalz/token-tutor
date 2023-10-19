@@ -4,7 +4,7 @@ import "./globals.css";
 import { XMTPProvider } from "@xmtp/react-sdk";
 import { Inter } from "next/font/google";
 import Header from "@/components/header";
-import { sepolia, mainnet } from "@wagmi/chains";
+import { sepolia, mainnet, goerli } from "@wagmi/chains";
 import Web3Provider from "../components/web3-provider";
 import XMTP from "@/components/XMTP";
 import XMTPDemo from "@/components/XMTPDemo";
@@ -27,7 +27,7 @@ export default function RootLayout({
         appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
         config={{
           loginMethods: ["email", "wallet"],
-          supportedChains: [sepolia],
+          supportedChains: [goerli],
           appearance: {
             theme: "light",
             accentColor: "#676FFF",
@@ -35,6 +35,9 @@ export default function RootLayout({
           },
         }}
       >
+        <head>
+          <title>Token Tutor</title>
+        </head>
         <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
           <XMTPProvider>
             <body className={inter.className}>

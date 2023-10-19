@@ -16,11 +16,12 @@ struct TutorTime {
 
 struct Tutor {
     string name;
-    string description;
+    string title;
     address tutor;
     uint mintedAmount;
     uint maxMint;
     uint hourPrice; // in wei
+    string description;
 }
 
 contract TutorTimeToken is ERC721, ERC721Burnable {
@@ -71,14 +72,16 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
         uint maxMint,
         uint price,
         string memory name,
+        string memory title,
         string memory description
     ) public {
         Tutor storage tutorData = addressToTutor[msg.sender];
         tutorData.name = name;
-        tutorData.description = description;
+        tutorData.title = title;
         tutorData.tutor = msg.sender;
         tutorData.maxMint = maxMint;
         tutorData.hourPrice = price;
+        tutorData.description = description;
         // Add tutor to allTutors array if not already in it
         bool tutorSaved = false;
         for (uint i = 0; i < allTutors.length; i++) {
