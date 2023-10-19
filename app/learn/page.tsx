@@ -32,7 +32,6 @@ export default function Learn() {
       signer
     );
     const tutorsFromContract = await contract.getAllTutors();
-    console.log(tutorsFromContract);
     const mappedTutors = tutorsFromContract.map((tutor: any) => {
       return {
         name: tutor[0],

@@ -12,12 +12,361 @@ export const getSigner = async (wallet: ConnectedWallet) => {
   return provider.getSigner();
 };
 
+export const hasApproved = async (signer: any) => {
+  const contract = new Contract(
+    contracts.MockUSDCToten.address,
+    contracts.MockUSDCToten.abi,
+    signer
+  );
+  const approved = await contract.allowance(
+    await signer.getAddress(),
+    contracts.TutorTimeToken.address
+  );
+  return approved > 0;
+};
+
+export const approve = async (signer: any) => {
+  const contract = new Contract(
+    contracts.MockUSDCToten.address,
+    contracts.MockUSDCToten.abi,
+    signer
+  );
+  await contract.approve(
+    contracts.TutorTimeToken.address,
+    "10000000000000000000000"
+  );
+};
+
 export const contracts = {
-  TutorTimeToken: {
-    address: "0x230b06a00e6ca3a6ccdba171ee8ef154e486ffab",
+  MockUSDCToten: {
+    address: "0x3DaF4DA079888E449e48C509ef68e5122cB45141",
     abi: [
       {
         inputs: [],
+        stateMutability: "nonpayable",
+        type: "constructor",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "spender",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "allowance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "needed",
+            type: "uint256",
+          },
+        ],
+        name: "ERC20InsufficientAllowance",
+        type: "error",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "sender",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "needed",
+            type: "uint256",
+          },
+        ],
+        name: "ERC20InsufficientBalance",
+        type: "error",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "approver",
+            type: "address",
+          },
+        ],
+        name: "ERC20InvalidApprover",
+        type: "error",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "receiver",
+            type: "address",
+          },
+        ],
+        name: "ERC20InvalidReceiver",
+        type: "error",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "sender",
+            type: "address",
+          },
+        ],
+        name: "ERC20InvalidSender",
+        type: "error",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "spender",
+            type: "address",
+          },
+        ],
+        name: "ERC20InvalidSpender",
+        type: "error",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            indexed: true,
+            internalType: "address",
+            name: "spender",
+            type: "address",
+          },
+          {
+            indexed: false,
+            internalType: "uint256",
+            name: "value",
+            type: "uint256",
+          },
+        ],
+        name: "Approval",
+        type: "event",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: "address",
+            name: "from",
+            type: "address",
+          },
+          {
+            indexed: true,
+            internalType: "address",
+            name: "to",
+            type: "address",
+          },
+          {
+            indexed: false,
+            internalType: "uint256",
+            name: "value",
+            type: "uint256",
+          },
+        ],
+        name: "Transfer",
+        type: "event",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "spender",
+            type: "address",
+          },
+        ],
+        name: "allowance",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "spender",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "value",
+            type: "uint256",
+          },
+        ],
+        name: "approve",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+          },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+        ],
+        name: "balanceOf",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "decimals",
+        outputs: [
+          {
+            internalType: "uint8",
+            name: "",
+            type: "uint8",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "name",
+        outputs: [
+          {
+            internalType: "string",
+            name: "",
+            type: "string",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "symbol",
+        outputs: [
+          {
+            internalType: "string",
+            name: "",
+            type: "string",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "totalSupply",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "to",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "value",
+            type: "uint256",
+          },
+        ],
+        name: "transfer",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+          },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "from",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "to",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "value",
+            type: "uint256",
+          },
+        ],
+        name: "transferFrom",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+          },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+    ],
+  },
+  TutorTimeToken: {
+    address: "0x289fFd6cBAD62454252BFF5219655f77F5567efa",
+    abi: [
+      {
+        inputs: [
+          {
+            internalType: "contract IERC20",
+            name: "_asset",
+            type: "address",
+          },
+        ],
         stateMutability: "nonpayable",
         type: "constructor",
       },
@@ -281,6 +630,19 @@ export const contracts = {
         type: "function",
       },
       {
+        inputs: [],
+        name: "asset",
+        outputs: [
+          {
+            internalType: "contract IERC20",
+            name: "",
+            type: "address",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
         inputs: [
           {
             internalType: "address",
@@ -341,6 +703,11 @@ export const contracts = {
               },
               {
                 internalType: "uint256",
+                name: "price",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
                 name: "mintedAt",
                 type: "uint256",
               },
@@ -384,6 +751,11 @@ export const contracts = {
                 internalType: "address",
                 name: "student",
                 type: "address",
+              },
+              {
+                internalType: "uint256",
+                name: "price",
+                type: "uint256",
               },
               {
                 internalType: "uint256",
@@ -534,7 +906,7 @@ export const contracts = {
         ],
         name: "safeMint",
         outputs: [],
-        stateMutability: "payable",
+        stateMutability: "nonpayable",
         type: "function",
       },
       {
@@ -690,6 +1062,11 @@ export const contracts = {
             internalType: "address",
             name: "student",
             type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
           },
           {
             internalType: "uint256",

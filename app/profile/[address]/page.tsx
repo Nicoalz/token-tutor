@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Web3Context } from "@/components/web3-provider";
 import { getUserOnChainData } from "@/lib/next-id";
 import { Tutor } from "@/lib/types";
-import { contracts } from "@/lib/utils";
+import { approve, contracts, hasApproved } from "@/lib/utils";
 import { Contract } from "ethers";
 import { Copy } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 
 export default function Profile({ params }: { params: { address: string } }) {
-  const { signer } = useContext(Web3Context);
+  const { signer, approved, update } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
   const [loadingMint, setLoadingMint] = useState(false);
   const [userData, setUserData] = useState<any>({});
@@ -164,19 +164,32 @@ export default function Profile({ params }: { params: { address: string } }) {
                     </div>
                   </div>
                   <div className="flex items-end mt-3">
-                    <Button
-                      disabled={
-                        parseFloat(tutor.maxMint) -
-                          parseFloat(tutor.mintedAmount) ==
-                        0
-                      }
-                      className="w-fit mr-3"
-                      variant={"secondary"}
-                      onClick={mint}
-                    >
-                      {" "}
-                      {loadingMint ? "Loading..." : "Mint"}{" "}
-                    </Button>
+                    {approved ? (
+                      <Button
+                        disabled={
+                          parseFloat(tutor.maxMint) -
+                            parseFloat(tutor.mintedAmount) ==
+                          0
+                        }
+                        className="w-fit mr-3"
+                        variant={"secondary"}
+                        onClick={mint}
+                      >
+                        {" "}
+                        {loadingMint ? "Loading..." : "Mint"}{" "}
+                      </Button>
+                    ) : (
+                      <Button
+                        className="w-fit mr-3"
+                        variant={"secondary"}
+                        onClick={async () => {
+                          await approve(signer);
+                          await update!();
+                        }}
+                      >
+                        Approve
+                      </Button>
+                    )}
                     <p className="text-muted text-xs">
                       {parseFloat(tutor.maxMint) -
                         parseFloat(tutor.mintedAmount)}{" "}
