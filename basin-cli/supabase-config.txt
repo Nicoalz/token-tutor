@@ -1,0 +1,1 @@
+basin publication create --dburi postgresql://postgres:<PASSWORD>@db.<PROJECT_ID>.supabase.co:5432/postgres --address <WALLET_ADDRESS> supabase.token_tutor_mentor
