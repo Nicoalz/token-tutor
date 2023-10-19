@@ -4,22 +4,27 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Web3Context } from "@/components/web3-provider";
 import { TimeToken, Tutor } from "@/lib/types";
-import { contracts } from "@/lib/utils";
 import { Contract } from "ethers";
 import { WalletCards } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-
+import { getMainContract } from "@/lib/contracts";
 export default function Inventory() {
   const router = useRouter();
   const { signer } = useContext(Web3Context);
   const [ownedTokens, setOwnedTokens] = useState<TimeToken[]>([]);
   const [loading, setLoading] = useState(true);
-  const contract = new Contract(
-    contracts.TutorTimeToken.address,
-    contracts.TutorTimeToken.abi,
-    signer
-  );
+  const [contract, setContract] = useState<Contract>({} as Contract);
+
+  useEffect(() => {
+    async function setContractAsync() {
+      if (signer) {
+        const contract = await getMainContract(signer);
+        setContract(contract);
+      }
+    }
+    setContractAsync();
+  }, [signer, contract]);
 
   const getOwnedTokens = async () => {
     try {

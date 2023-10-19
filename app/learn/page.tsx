@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useEffect, useContext, useState } from "react";
 import { Web3Context } from "../../components/web3-provider";
 import { Contract } from "ethers";
-import { contracts } from "@/lib/utils";
 import { Tutor } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,22 +15,30 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "lucide-react";
 import { useRouter } from "next/navigation";
-
+import { getMainContract } from "@/lib/contracts";
 export default function Learn() {
   const { signer } = useContext(Web3Context);
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [savedTutors, setSavedTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+  const [contract, setContract] = useState<Contract>({} as Contract);
+
+  useEffect(() => {
+    async function setContractAsync() {
+      if (signer) {
+        const contract = await getMainContract(signer);
+        setContract(contract);
+      }
+    }
+    setContractAsync();
+  }, [signer]);
 
   const getAllTutors = async () => {
     setLoading(true);
-    const contract = new Contract(
-      contracts.TutorTimeToken.address,
-      contracts.TutorTimeToken.abi,
-      signer
-    );
+    console.log({ contract });
     const tutorsFromContract = await contract.getAllTutors();
+    console.log({ tutorsFromContract });
     const mappedTutors = tutorsFromContract.map((tutor: any) => {
       return {
         name: tutor[0],
@@ -81,7 +88,7 @@ export default function Learn() {
     } else {
       router.push("/");
     }
-  }, [router, signer]);
+  }, [router, signer, contract]);
 
   return (
     <main className="mx-32 my-10 p-10 bg-[#181c2a] rounded-xl shadow-sm">

@@ -1,6 +1,7 @@
 "use client";
 
-import { getSigner, hasApproved } from "@/lib/utils";
+import { getSigner } from "@/lib/utils";
+import { hasApproved } from "@/lib/contracts";
 import { ConnectedWallet, useWallets } from "@privy-io/react-auth";
 import { Signer } from "ethers";
 import { createContext, useEffect, useState } from "react";

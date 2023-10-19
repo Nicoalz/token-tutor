@@ -7,12 +7,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/use-toast";
 import { Web3Context } from "@/components/web3-provider";
 import { TimeToken, Tutor } from "@/lib/types";
-import { contracts } from "@/lib/utils";
 import { Contract } from "ethers";
 import { Loader2Icon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
+import { getMainContract } from "@/lib/contracts";
 export default function Profile() {
   const { signer } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
@@ -22,11 +22,17 @@ export default function Profile() {
   const [loadingSave, setLoadingSave] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const contract = new Contract(
-    contracts.TutorTimeToken.address,
-    contracts.TutorTimeToken.abi,
-    signer
-  );
+  const [contract, setContract] = useState<Contract>({} as Contract);
+
+  useEffect(() => {
+    async function setContractAsync() {
+      if (signer) {
+        const contract = await getMainContract(signer);
+        setContract(contract);
+      }
+    }
+    setContractAsync();
+  }, [signer]);
 
   const getTutor = async () => {
     const tutorFromContract = await contract.addressToTutor(
@@ -81,7 +87,7 @@ export default function Profile() {
     } else {
       router.push("/");
     }
-  }, [router, signer]);
+  }, [router, signer, contract]);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;

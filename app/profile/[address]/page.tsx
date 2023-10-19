@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Web3Context } from "@/components/web3-provider";
 import { getUserOnChainData } from "@/lib/next-id";
 import { Tutor } from "@/lib/types";
-import { approve, contracts, hasApproved } from "@/lib/utils";
 import { Contract } from "ethers";
 import { Copy } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
@@ -21,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getMainContract, approve } from "@/lib/contracts";
 
 export default function Profile({ params }: { params: { address: string } }) {
   const { signer, approved, update } = useContext(Web3Context);
@@ -33,11 +33,17 @@ export default function Profile({ params }: { params: { address: string } }) {
   const [isPriceUSDC, setIsPriceUSDC] = useState(true);
   const [apePrice, setApePrice] = useState<number>(0);
   const router = useRouter();
-  const contract = new Contract(
-    contracts.TutorTimeToken.address,
-    contracts.TutorTimeToken.abi,
-    signer
-  );
+  const [contract, setContract] = useState<Contract>({} as Contract);
+
+  useEffect(() => {
+    async function setContractAsync() {
+      if (signer) {
+        const contract = await getMainContract(signer);
+        setContract(contract);
+      }
+    }
+    setContractAsync();
+  }, [signer]);
 
   const mint = async () => {
     if (!tutor) return;
@@ -84,7 +90,7 @@ export default function Profile({ params }: { params: { address: string } }) {
     } else {
       router.push("/");
     }
-  }, [signer, router]);
+  }, [signer, router, contract]);
 
   useEffect(() => {
     async function getAPEvsETHPrice() {
