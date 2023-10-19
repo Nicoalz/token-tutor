@@ -53,7 +53,7 @@ export default function Resume({
   }, [userAddress, fileUploading]);
 
   const client = new Web3Storage({
-    token: process.env.NEXT_PUBLIC_WEB_STORAGE_KEY,
+    token: process.env.NEXT_PUBLIC_WEB_STORAGE_KEY!,
   });
 
   function showLink(url: string) {
