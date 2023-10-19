@@ -5,19 +5,19 @@ const contractChains = [
     chainName: "goerli",
     chainId: 5,
     token: "0x328507DC29C95c170B56a1b3A758eB7a9E73455c", // APE Coin
-    main: "0x0625d6302eb863236c5760050Bf7f1104716251C",
+    main: "0x0625d6302eb863236c5760050Bf7f1104716251C", // https://goerli.etherscan.io/address/0x0625d6302eb863236c5760050Bf7f1104716251C
   },
   {
     chainName: "scroll-sepolia",
     chainId: 534351,
-    token: "0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6", // USDC
-    main: "0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F",
+    token: "0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6", // USDC https://sepolia-blockscout.scroll.io/address/0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6
+    main: "0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F", // https://sepolia-blockscout.scroll.io/address/0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F
   },
   {
     chainName: "polygon-zkevm",
-    chainId: 1101,
-    token: "", // USDC
-    main: "",
+    chainId: 1442,
+    token: "0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6", // USDC https://testnet-zkevm.polygonscan.com/address/0x15e0f178b0ba7bb97352b549bfb90c02de3f77c6
+    main: "0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F", // https://testnet-zkevm.polygonscan.com/address/0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F
   },
 ];
 
@@ -33,12 +33,14 @@ const getChainContract = (chainId: number) => {
 
 export const getMainContract = async (signer: Signer) => {
   const chainId = await signer.getChainId();
+  console.log({ chainId });
   const chainContract = getChainContract(chainId);
   return new Contract(chainContract.main, MainContractABI, signer);
 };
 
 export const getTokenContract = async (signer: Signer) => {
   const chainId = await signer.getChainId();
+  console.log({ chainId });
   const chainContract = getChainContract(chainId);
   return new Contract(chainContract.token, ERC20ABI, signer);
 };
