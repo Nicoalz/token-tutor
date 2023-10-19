@@ -3,6 +3,7 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 struct TutorTime {
     uint tokenId;
@@ -15,11 +16,12 @@ struct TutorTime {
 
 struct Tutor {
     string name;
-    string description;
+    string title;
     address tutor;
     uint mintedAmount;
     uint maxMint;
     uint hourPrice; // in wei
+    string description;
 }
 
 contract TutorTimeToken is ERC721, ERC721Burnable {
@@ -31,10 +33,14 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
     // Token metadata
     mapping(uint => TutorTime) public tokenData;
 
-    constructor() ERC721("TutorTime", "TT") {}
+    IERC20 public immutable asset;
+
+    constructor(IERC20 _asset) ERC721("TutorTime", "TT") {
+        asset = _asset;
+    }
 
     // Students can mint time of a tutor (time is a Token)
-    function safeMint(address tutor) public payable {
+    function safeMint(address tutor) public {
         Tutor storage tutorData = addressToTutor[tutor];
         require(
             tutorData.tutor != address(0),
@@ -43,10 +49,6 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
         require(
             tutorData.mintedAmount < tutorData.maxMint,
             "TutorTimeToken: max mint per tutor reached"
-        );
-        require(
-            msg.value >= tutorData.hourPrice,
-            "TutorTimeToken: not enough ETH sent"
         );
         require(
             tutor != msg.sender,
@@ -63,21 +65,23 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
             0
         );
         _safeMint(msg.sender, tokenId);
-        payable(tutor).transfer(tutorData.hourPrice);
+        asset.transferFrom(msg.sender, address(this), tutorData.hourPrice); // Transfer asset to contract
     }
 
     function setTutorPreferences(
         uint maxMint,
         uint price,
         string memory name,
+        string memory title,
         string memory description
     ) public {
         Tutor storage tutorData = addressToTutor[msg.sender];
         tutorData.name = name;
-        tutorData.description = description;
+        tutorData.title = title;
         tutorData.tutor = msg.sender;
         tutorData.maxMint = maxMint;
         tutorData.hourPrice = price;
+        tutorData.description = description;
         // Add tutor to allTutors array if not already in it
         bool tutorSaved = false;
         for (uint i = 0; i < allTutors.length; i++) {
@@ -130,11 +134,12 @@ contract TutorTimeToken is ERC721, ERC721Burnable {
             "TutorTimeToken: token already redeemed"
         );
         require(
-            tokenData[tokenId].tutor == msg.sender,
-            "TutorTimeToken: only tutor can redeem token"
+            tokenData[tokenId].student == msg.sender,
+            "TutorTimeToken: only student can redeem token"
         );
         tokenData[tokenId].redeemedAt = block.timestamp;
         super.burn(tokenId);
+        asset.transfer(tokenData[tokenId].tutor, tokenData[tokenId].price); // Transfer asset to tutor
     }
 
     function getAllTutors() public view returns (Tutor[] memory) {

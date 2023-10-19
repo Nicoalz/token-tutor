@@ -32,15 +32,15 @@ export default function Learn() {
       signer
     );
     const tutorsFromContract = await contract.getAllTutors();
-    console.log(tutorsFromContract);
     const mappedTutors = tutorsFromContract.map((tutor: any) => {
       return {
         name: tutor[0],
-        description: tutor[1],
+        title: tutor[1],
         tutorAddress: tutor[2],
         mintedAmount: tutor[3].toString(),
         maxMint: tutor[4].toString(),
         hourPrice: tutor[5].toString(),
+        description: tutor[6],
       };
     });
     setTutors(mappedTutors);
@@ -54,7 +54,8 @@ export default function Learn() {
       return (
         tutor.tutorAddress.toLowerCase().includes(value) ||
         tutor.name.toLowerCase().includes(value) ||
-        tutor.description.toLowerCase().includes(value)
+        tutor.description.toLowerCase().includes(value) ||
+        tutor.title.toLowerCase().includes(value)
       );
     });
     setTutors(filteredTutors);
@@ -101,19 +102,22 @@ export default function Learn() {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid grid-cols-4 gap-10">
+      <div className="flex flex-col gap-10">
         {tutors.length > 0 &&
           tutors.map((tutor, index) => {
             return (
               <div
                 key={index}
-                className="bg-[#262938] flex flex-col p-5 rounded-lg shadow-sm gap-3 cursor-pointer hover:shadow-md transition"
+                className="bg-[#262938] flex flex-col p-5 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition"
                 onClick={() => {
                   router.push(`/profile/${tutor.tutorAddress}`);
                 }}
               >
                 <h1 className="text-2xl font-bold">{tutor.name}</h1>
-                <p className="text-sm break-words">{tutor.description}</p>
+                <h1 className="text-lg mb-3 font-bold text-secondary">
+                  {tutor.title}
+                </h1>
+                <p className="text-sm break-words mb-1">{tutor.description}</p>
                 <h1
                   className="text-xs text-muted hover:underline"
                   onClick={() => {

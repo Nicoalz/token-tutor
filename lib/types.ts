@@ -1,6 +1,7 @@
 export type Tutor = {
   name: string;
   description: string;
+  title: string;
   tutorAddress: string;
   mintedAmount: string;
   maxMint: string;

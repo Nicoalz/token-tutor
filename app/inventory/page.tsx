@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Web3Context } from "@/components/web3-provider";
 import { TimeToken, Tutor } from "@/lib/types";
@@ -48,6 +49,14 @@ export default function Inventory() {
     return tutor.name;
   };
 
+  const redeem = async (tokenId: number) => {
+    const tx = await contract.burn(tokenId);
+    setLoading(true);
+    await tx.wait();
+    await getOwnedTokens();
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (signer) {
       setLoading(true);
@@ -70,7 +79,6 @@ export default function Inventory() {
           ownedTokens.map((timeToken, index) => {
             return (
               <div
-                onClick={() => router.push(`/profile/${timeToken.address}`)}
                 key={index}
                 className="cursor-pointer hover:opacity-90 flex flex-col bg-white/10 w-52 p-3 rounded-xl"
               >
@@ -80,7 +88,7 @@ export default function Inventory() {
                 <p className="text-md">
                   Bought for{" "}
                   <span className="text-secondary font-bold">
-                    {parseFloat(timeToken.price)}
+                    {parseFloat(timeToken.price)} USDC
                   </span>
                 </p>
                 <p className="text-xs font-light text-muted ">
@@ -89,6 +97,12 @@ export default function Inventory() {
                     parseFloat(timeToken.mintedAt.toString()) * 1000
                   ).toLocaleString()}
                 </p>
+                <Badge
+                  className="text-center mt-3 ml-auto w-fit"
+                  onClick={() => redeem(timeToken.tokenId)}
+                >
+                  Redeem
+                </Badge>
               </div>
             );
           })}

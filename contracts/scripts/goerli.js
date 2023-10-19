@@ -7,11 +7,19 @@
 const hre = require("hardhat");
 
 async function main() {
-  const TutorTimeToken = await hre.ethers.deployContract("TutorTimeToken");
+  // const MockUSDC = await hre.ethers.deployContract("MockUSDC");
+
+  // await MockUSDC.waitForDeployment();
+
+  // console.log("MockUSDC deployed to:", await MockUSDC.getAddress());
+
+  const TutorTimeToken = await hre.ethers.deployContract("TutorTimeToken", [
+    "0x328507DC29C95c170B56a1b3A758eB7a9E73455c", // APE TOKEN GOERLI
+  ]);
 
   await TutorTimeToken.waitForDeployment();
 
-  console.log("TutorTimeToken deployed to:", TutorTimeToken.getAddress());
+  console.log("TutorTimeToken deployed to:", await TutorTimeToken.getAddress());
 }
 
 // We recommend this pattern to be able to use async/await everywhere

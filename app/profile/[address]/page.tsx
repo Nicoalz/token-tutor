@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Web3Context } from "@/components/web3-provider";
 import { getUserOnChainData } from "@/lib/next-id";
 import { Tutor } from "@/lib/types";
-import { contracts } from "@/lib/utils";
+import { approve, contracts, hasApproved } from "@/lib/utils";
 import { Contract } from "ethers";
 import { Copy } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 
 export default function Profile({ params }: { params: { address: string } }) {
-  const { signer } = useContext(Web3Context);
+  const { signer, approved, update } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
   const [loadingMint, setLoadingMint] = useState(false);
   const [userData, setUserData] = useState<any>({});
@@ -42,9 +42,7 @@ export default function Profile({ params }: { params: { address: string } }) {
   const mint = async () => {
     if (!tutor) return;
     setLoadingMint(true);
-    const tx = await contract.safeMint(params.address, {
-      value: (parseFloat(tutor!.hourPrice) * 10 ** 18).toString(),
-    });
+    const tx = await contract.safeMint(params.address);
     await tx.wait();
     setLoadingMint(false);
   };
@@ -54,11 +52,12 @@ export default function Profile({ params }: { params: { address: string } }) {
       const tutorFromContract = await contract.addressToTutor(params.address);
       setTutor({
         name: tutorFromContract[0],
-        description: tutorFromContract[1],
+        title: tutorFromContract[1],
         tutorAddress: tutorFromContract[2],
         mintedAmount: tutorFromContract[3].toString(),
         maxMint: tutorFromContract[4].toString(),
         hourPrice: (tutorFromContract[5] / 10 ** 18).toString(),
+        description: tutorFromContract[6],
       });
     } catch (e) {
       console.log(e);
@@ -99,7 +98,7 @@ export default function Profile({ params }: { params: { address: string } }) {
   return (
     <div className="mx-32 my-10 flex gap-10">
       <main className="w-9/12 p-10 bg-[#181c2a] rounded-xl shadow-sm flex gap-10 min-h-[32rem]">
-        <div className="flex flex-col w-4/12">
+        <div className="flex flex-col w-4/12 mr-10">
           {!loading && (
             <div className="flex flex-col ">
               <Avatar address={params.address} />
@@ -131,6 +130,9 @@ export default function Profile({ params }: { params: { address: string } }) {
                   <h1 className="text-lg font-semibold">
                     Book a session with {tutor.name}
                   </h1>
+                  <p className="text-xs text-secondary mb-2 font-light">
+                    {tutor.title}
+                  </p>
 
                   <p className="text-xs font-light">{tutor.description}</p>
                   <div className="flex items-center mt-4">
@@ -152,7 +154,7 @@ export default function Profile({ params }: { params: { address: string } }) {
                           }
                         }}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-24">
                           <SelectValue placeholder="USDC" />
                         </SelectTrigger>
 
@@ -164,19 +166,32 @@ export default function Profile({ params }: { params: { address: string } }) {
                     </div>
                   </div>
                   <div className="flex items-end mt-3">
-                    <Button
-                      disabled={
-                        parseFloat(tutor.maxMint) -
-                          parseFloat(tutor.mintedAmount) ==
-                        0
-                      }
-                      className="w-fit mr-3"
-                      variant={"secondary"}
-                      onClick={mint}
-                    >
-                      {" "}
-                      {loadingMint ? "Loading..." : "Mint"}{" "}
-                    </Button>
+                    {approved ? (
+                      <Button
+                        disabled={
+                          parseFloat(tutor.maxMint) -
+                            parseFloat(tutor.mintedAmount) ==
+                          0
+                        }
+                        className="w-fit mr-3"
+                        variant={"secondary"}
+                        onClick={mint}
+                      >
+                        {" "}
+                        {loadingMint ? "Loading..." : "Mint"}{" "}
+                      </Button>
+                    ) : (
+                      <Button
+                        className="w-fit mr-3"
+                        variant={"secondary"}
+                        onClick={async () => {
+                          await approve(signer);
+                          await update!();
+                        }}
+                      >
+                        Approve
+                      </Button>
+                    )}
                     <p className="text-muted text-xs">
                       {parseFloat(tutor.maxMint) -
                         parseFloat(tutor.mintedAmount)}{" "}
