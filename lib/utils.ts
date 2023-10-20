@@ -1,7 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ConnectedWallet } from "@privy-io/react-auth";
-import { Contract } from "ethers";
+import { Contract, Signer } from "ethers";
+import { getTokenContract } from "./contracts";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,11 +14,7 @@ export const getSigner = async (wallet: ConnectedWallet) => {
 };
 
 export const hasApproved = async (signer: any) => {
-  const contract = new Contract(
-    contracts.MockUSDCToten.address,
-    contracts.MockUSDCToten.abi,
-    signer
-  );
+  const contract = await getTokenContract(signer);
   const approved = await contract.allowance(
     await signer.getAddress(),
     contracts.TutorTimeToken.address
@@ -26,11 +23,7 @@ export const hasApproved = async (signer: any) => {
 };
 
 export const approve = async (signer: any) => {
-  const contract = new Contract(
-    contracts.MockUSDCToten.address,
-    contracts.MockUSDCToten.abi,
-    signer
-  );
+  const contract = await getTokenContract(signer);
   await contract.approve(
     contracts.TutorTimeToken.address,
     "10000000000000000000000"
@@ -45,11 +38,11 @@ Mantle:
 
 Polygon:
 - TOKEN 0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6
-- Main 0x4cac7e5f0a9a37aa2bc3396b1bbd81b9f8aa4e9f
+- Main 0x302e33Cc40ECAd43e45B7854105E81B6ED5c5894
 
 Scroll:
 - TOKEN 0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6
-- Main 0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F
+- Main 0x2222B7aD8C04E23a0c4486Dc3C448a4b79E6642d
 */
 
 export const contracts = {

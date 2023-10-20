@@ -111,7 +111,7 @@ export default function Profile() {
       setLoadingSave(true);
       const tx = await contract.setTutorPreferences(
         parseFloat(tutor!.maxMint),
-        (parseFloat(tutor!.hourPrice) * 10 ** 18).toString(),
+        tutor!.hourPrice + "0".repeat(18),
         tutor!.name,
         tutor!.title,
         tutor!.description

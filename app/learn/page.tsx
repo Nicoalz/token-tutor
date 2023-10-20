@@ -83,7 +83,7 @@ export default function Learn() {
   };
 
   useEffect(() => {
-    if (signer) {
+    if (signer && contract) {
       getAllTutors();
     } else {
       router.push("/");
@@ -124,7 +124,7 @@ export default function Learn() {
                 <h1 className="text-lg mb-3 font-bold text-secondary">
                   {tutor.title}
                 </h1>
-                <p className="text-sm break-words mb-1">{tutor.description}</p>
+                <p className="text-xs break-words mb-1">{tutor.description}</p>
                 <h1
                   className="text-xs text-muted hover:underline"
                   onClick={() => {

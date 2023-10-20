@@ -10,14 +10,14 @@ const contractChains = [
   {
     chainName: "scroll-sepolia",
     chainId: 534351,
-    token: "0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6", // USDC https://sepolia-blockscout.scroll.io/address/0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6
-    main: "0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F", // https://sepolia-blockscout.scroll.io/address/0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F
+    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://sepolia-blockscout.scroll.io/address/0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6
+    main: "0x946bF31b3759089c5397E141eD0885BEbE0F3fEC", // https://sepolia-blockscout.scroll.io/address/0x302e33Cc40ECAd43e45B7854105E81B6ED5c5894
   },
   {
     chainName: "polygon-zkevm",
     chainId: 1442,
-    token: "0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6", // USDC https://testnet-zkevm.polygonscan.com/address/0x15e0f178b0ba7bb97352b549bfb90c02de3f77c6
-    main: "0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F", // https://testnet-zkevm.polygonscan.com/address/0x4CAc7E5f0a9A37aa2BC3396b1BBD81b9f8aa4E9F
+    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://testnet-zkevm.polygonscan.com/address/0x15e0f178b0ba7bb97352b549bfb90c02de3f77c6
+    main: "0x946bF31b3759089c5397E141eD0885BEbE0F3fEC", // https://testnet-zkevm.polygonscan.com/address/0x2222B7aD8C04E23a0c4486Dc3C448a4b79E6642d
   },
 ];
 
@@ -35,6 +35,7 @@ export const getMainContract = async (signer: Signer) => {
   const chainId = await signer.getChainId();
   console.log({ chainId });
   const chainContract = getChainContract(chainId);
+  console.log({ chainContract });
   return new Contract(chainContract.main, MainContractABI, signer);
 };
 

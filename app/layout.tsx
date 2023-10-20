@@ -4,7 +4,15 @@ import "./globals.css";
 import { XMTPProvider } from "@xmtp/react-sdk";
 import { Inter } from "next/font/google";
 import Header from "@/components/header";
-import { sepolia, mainnet, goerli } from "@wagmi/chains";
+import {
+  sepolia,
+  mainnet,
+  goerli,
+  scrollTestnet,
+  polygonZkEvmTestnet,
+  mantleTestnet,
+  scrollSepolia,
+} from "@wagmi/chains";
 import Web3Provider from "../components/web3-provider";
 import XMTP from "@/components/XMTP";
 import XMTPDemo from "@/components/XMTPDemo";
@@ -27,7 +35,12 @@ export default function RootLayout({
         appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
         config={{
           loginMethods: ["email", "wallet"],
-          supportedChains: [goerli],
+          supportedChains: [
+            goerli,
+            scrollSepolia,
+            polygonZkEvmTestnet,
+            mantleTestnet,
+          ],
           appearance: {
             theme: "light",
             accentColor: "#676FFF",
