@@ -49,7 +49,45 @@ export default function RootLayout({
         }}
       >
         <head>
-          <title>Token Tutor</title>
+          <title>Token Tutor - Your new web3 mentoring platform</title>
+          <meta
+            name="title"
+            content="Token Tutor - Your new web3 mentoring platform"
+          />
+          <meta
+            name="description"
+            content="Tokenize Time, Maximize Learning, Build the Future"
+          />
+
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://token-tutor.vercel.app/" />
+          <meta
+            property="og:title"
+            content="Token Tutor - Your new web3 mentoring platform"
+          />
+          <meta
+            property="og:description"
+            content="Tokenize Time, Maximize Learning, Build the Future"
+          />
+          <meta
+            property="og:image"
+            content="https://token-tutor.vercel.app/token-tutor-official-cover.png"
+          />
+
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:url" content="https://token-tutor.vercel.app/" />
+          <meta
+            property="twitter:title"
+            content="Token Tutor - Your new web3 mentoring platform"
+          />
+          <meta
+            property="twitter:description"
+            content="Tokenize Time, Maximize Learning, Build the Future"
+          />
+          <meta
+            property="twitter:image"
+            content="https://token-tutor.vercel.app/token-tutor-official-cover.png"
+          />
         </head>
         <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
           <XMTPProvider>
