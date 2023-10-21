@@ -348,9 +348,7 @@ export default function Profile() {
           }}
           claims={[
             {
-              groupId: "0x1cde61966decb8600dfd0749bd371f12",
-              value: 9,
-              claimType: ClaimType.GTE,
+              groupId: "0x0f800ff28a426924cbe66b67b9f837e2",
             },
           ]}
           signature={{
