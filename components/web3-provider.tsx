@@ -11,7 +11,11 @@ export const Web3Context = createContext<{
   approved?: boolean;
   update?: () => void;
   address?: string;
-}>({});
+  setSismo?: (sismo: boolean) => void;
+  sismo: boolean;
+}>({
+  sismo: false,
+});
 
 export default function Web3Provider({
   children,
@@ -22,6 +26,7 @@ export default function Web3Provider({
   const [signer, setSigner] = useState<Signer>();
   const [approved, setApproved] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
+  const [sismo, setSismo] = useState<boolean>(false);
 
   const fetchSigner = async (allWallets: ConnectedWallet) => {
     setSigner((await getSigner(allWallets)) as unknown as Signer);
@@ -49,7 +54,9 @@ export default function Web3Provider({
   }, [signer]);
 
   return (
-    <Web3Context.Provider value={{ signer, approved, update, address }}>
+    <Web3Context.Provider
+      value={{ signer, approved, update, address, setSismo, sismo: true }}
+    >
       {children}
     </Web3Context.Provider>
   );
