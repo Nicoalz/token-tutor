@@ -21,9 +21,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getMainContract, approve } from "@/lib/contracts";
+import {
+  SismoConnectButton,
+  AuthType,
+  SismoConnectResponse,
+  ClaimType,
+} from "@sismo-core/sismo-connect-react";
 
 export default function Profile({ params }: { params: { address: string } }) {
-  const { signer, approved, update } = useContext(Web3Context);
+  const { signer, approved, update, address } = useContext(Web3Context);
   const [tutor, setTutor] = useState<Tutor>();
   const [loadingMint, setLoadingMint] = useState(false);
   const [userData, setUserData] = useState<any>({});
@@ -34,6 +40,7 @@ export default function Profile({ params }: { params: { address: string } }) {
   const [apePrice, setApePrice] = useState<number>(0);
   const router = useRouter();
   const [contract, setContract] = useState<Contract>({} as Contract);
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     async function setContractAsync() {
@@ -281,7 +288,7 @@ export default function Profile({ params }: { params: { address: string } }) {
               )}
 
             {loading &&
-              ["1", "2", "3", "4", "5"].map((_, index) => {
+              ["1", "2", "3"].map((_, index) => {
                 return (
                   <div
                     key={index}
@@ -294,6 +301,34 @@ export default function Profile({ params }: { params: { address: string } }) {
                   </div>
                 );
               })}
+          </div>
+          <div className="mt-auto ml-auto">
+            {!loading && params.address === address && !data ? (
+              <SismoConnectButton
+                config={{
+                  appId: "0x1c00de936e8d97a97e892cfbb88e3a21",
+                }}
+                claims={[
+                  {
+                    groupId: "0x1cde61966decb8600dfd0749bd371f12",
+                    value: 9,
+                    claimType: ClaimType.GTE,
+                  },
+                ]}
+                signature={{
+                  message:
+                    "I sign this message to prove that I own this address: " +
+                    params.address,
+                }}
+                onResponse={async (response: SismoConnectResponse) => {
+                  console.log({ response });
+                }}
+              />
+            ) : !loading && data ? (
+              <p>{data}</p>
+            ) : (
+              <Skeleton className="h-12 rounded-xl"></Skeleton>
+            )}
           </div>
         </div>
       </main>
