@@ -365,7 +365,7 @@ export const contracts = {
     ],
   },
   TutorTimeToken: {
-    address: "0x0625d6302eb863236c5760050Bf7f1104716251C",
+    address: "0x16cB7e2Dd6F077d54b37208F2AC5Ad300CEd0Da6",
     abi: [
       {
         inputs: [
