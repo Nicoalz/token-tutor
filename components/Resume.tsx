@@ -156,7 +156,7 @@ export default function Resume({
             {fileUploading ? (
               <Loader2Icon className="animate-spin inline" />
             ) : (
-              "Change"
+              "Save"
             )}
           </Button>
         </form>

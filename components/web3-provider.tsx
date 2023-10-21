@@ -10,7 +10,12 @@ export const Web3Context = createContext<{
   signer?: Signer;
   approved?: boolean;
   update?: () => void;
-}>({});
+  address?: string;
+  setSismo?: (sismo: boolean) => void;
+  sismo: boolean;
+}>({
+  sismo: false,
+});
 
 export default function Web3Provider({
   children,
@@ -20,6 +25,8 @@ export default function Web3Provider({
   const { wallets } = useWallets();
   const [signer, setSigner] = useState<Signer>();
   const [approved, setApproved] = useState<boolean>(false);
+  const [address, setAddress] = useState<string>("");
+  const [sismo, setSismo] = useState<boolean>(false);
 
   const fetchSigner = async (allWallets: ConnectedWallet) => {
     setSigner((await getSigner(allWallets)) as unknown as Signer);
@@ -34,7 +41,10 @@ export default function Web3Provider({
   };
 
   useEffect(() => {
-    if (wallets.length > 0) fetchSigner(wallets[0]);
+    if (wallets.length > 0) {
+      fetchSigner(wallets[0]);
+      setAddress(wallets[0].address);
+    }
   }, [wallets]);
 
   useEffect(() => {
@@ -44,7 +54,9 @@ export default function Web3Provider({
   }, [signer]);
 
   return (
-    <Web3Context.Provider value={{ signer, approved, update }}>
+    <Web3Context.Provider
+      value={{ signer, approved, update, address, setSismo, sismo }}
+    >
       {children}
     </Web3Context.Provider>
   );

@@ -34,6 +34,7 @@ export default function Profile({ params }: { params: { address: string } }) {
   const [apePrice, setApePrice] = useState<number>(0);
   const router = useRouter();
   const [contract, setContract] = useState<Contract>({} as Contract);
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     async function setContractAsync() {
@@ -281,7 +282,7 @@ export default function Profile({ params }: { params: { address: string } }) {
               )}
 
             {loading &&
-              ["1", "2", "3", "4", "5"].map((_, index) => {
+              ["1", "2", "3"].map((_, index) => {
                 return (
                   <div
                     key={index}
