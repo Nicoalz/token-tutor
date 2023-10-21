@@ -5,7 +5,7 @@ const contractChains = [
     chainName: "goerli",
     chainId: 5,
     token: "0x328507DC29C95c170B56a1b3A758eB7a9E73455c", // APE Coin
-    main: "0x0625d6302eb863236c5760050Bf7f1104716251C", // https://goerli.etherscan.io/address/0x0625d6302eb863236c5760050Bf7f1104716251C
+    main: "0x16cB7e2Dd6F077d54b37208F2AC5Ad300CEd0Da6", // https://goerli.etherscan.io/address/0x0625d6302eb863236c5760050Bf7f1104716251C
   },
   {
     chainName: "scroll-sepolia",
