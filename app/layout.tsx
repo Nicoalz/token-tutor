@@ -14,8 +14,7 @@ import {
   scrollSepolia,
 } from "@wagmi/chains";
 import Web3Provider from "../components/web3-provider";
-import XMTP from "@/components/XMTP";
-import XMTPDemo from "@/components/XMTPDemo";
+import XMTPChat from "@/components/XMTPChat";
 import { Toaster } from "@/components/ui/toaster";
 import { WagmiConfig, configureChains } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
@@ -95,7 +94,7 @@ export default function RootLayout({
               <Header />
               <Web3Provider>
                 {children}
-                <XMTPDemo />
+                <XMTPChat />
                 <Toaster />
               </Web3Provider>
             </body>

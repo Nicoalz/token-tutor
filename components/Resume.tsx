@@ -92,12 +92,9 @@ export default function Resume({
   async function handleSubmit(event: any) {
     if (!userAddress || !isMe) return;
     setFileUploading(true);
-    // don't reload the page!
     event.preventDefault();
     const fileName = files[0].name;
     const cid = await client.put(files);
-    console.log({ cid });
-    showMessage(`> ✅ web3.storage now hosting ${cid}`);
     showLink(`https://dweb.link/ipfs/${cid}`);
     await upsertToSupabase({
       cid,

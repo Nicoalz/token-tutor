@@ -6,7 +6,7 @@ import { Signer } from "ethers";
 import { getEnv, storeKeys, loadKeys, wipeKeys } from "@/lib/xmtp";
 import { Web3Context } from "./web3-provider";
 import { Button } from "./ui/button";
-export default function XMTPDemo({ isPWA = false }: { isPWA?: boolean }) {
+export default function XMTPChat({ isPWA = false }: { isPWA?: boolean }) {
   const { signer: wallet } = useContext(Web3Context);
   const isBrowser = typeof window !== "undefined";
 
