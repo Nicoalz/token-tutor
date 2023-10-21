@@ -55,7 +55,7 @@ export function LoginButton() {
               <SelectItem value="5">Goerli</SelectItem>
               <SelectItem value="534351">Scroll</SelectItem>
               <SelectItem value="1442">Polygon ZkEVM</SelectItem>
-              <SelectItem value="1442">Mantle</SelectItem>
+              <SelectItem value="5001">Mantle</SelectItem>
             </SelectContent>
           </Select>
           <DropdownMenu>

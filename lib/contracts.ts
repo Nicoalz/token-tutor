@@ -19,6 +19,12 @@ const contractChains = [
     token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://testnet-zkevm.polygonscan.com/address/0x15e0f178b0ba7bb97352b549bfb90c02de3f77c6
     main: "0x95263f7b3994C8E3C71A446260d76d866FD63f69", // https://testnet-zkevm.polygonscan.com/address/0x2222B7aD8C04E23a0c4486Dc3C448a4b79E6642d
   },
+  {
+    chainName: "mantle-testnet",
+    chainId: 5001,
+    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://testnet-zkevm.polygonscan.com/address/0x15e0f178b0ba7bb97352b549bfb90c02de3f77c6
+    main: "0x95263f7b3994C8E3C71A446260d76d866FD63f69", // https://testnet-zkevm.polygonscan.com/address/0x2222B7aD8C04E23a0c4486Dc3C448a4b79E6642d
+  },
 ];
 
 const getChainContract = (chainId: number) => {

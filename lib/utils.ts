@@ -30,21 +30,6 @@ export const approve = async (signer: any) => {
   );
 };
 
-/*
-L2 Contract Addresses:
-Mantle:
-- TOKEN
-- Main
-
-Polygon:
-- TOKEN 0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6
-- Main 0x302e33Cc40ECAd43e45B7854105E81B6ED5c5894
-
-Scroll:
-- TOKEN 0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6
-- Main 0x2222B7aD8C04E23a0c4486Dc3C448a4b79E6642d
-*/
-
 export const contracts = {
   MockUSDCToten: {
     address: "0x328507DC29C95c170B56a1b3A758eB7a9E73455c", // APE
