@@ -55,7 +55,7 @@ export default function Web3Provider({
 
   return (
     <Web3Context.Provider
-      value={{ signer, approved, update, address, setSismo, sismo: true }}
+      value={{ signer, approved, update, address, setSismo, sismo }}
     >
       {children}
     </Web3Context.Provider>
