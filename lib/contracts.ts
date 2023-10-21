@@ -4,26 +4,26 @@ const contractChains = [
   {
     chainName: "goerli",
     chainId: 5,
-    token: "0x328507DC29C95c170B56a1b3A758eB7a9E73455c", // APE Coin
-    main: "0x16cB7e2Dd6F077d54b37208F2AC5Ad300CEd0Da6", // https://goerli.etherscan.io/address/0x0625d6302eb863236c5760050Bf7f1104716251C
+    token: "0x328507DC29C95c170B56a1b3A758eB7a9E73455c", // official APE Coin Testnet
+    main: "0x16cB7e2Dd6F077d54b37208F2AC5Ad300CEd0Da6", // https://goerli.etherscan.io/address/0x16cB7e2Dd6F077d54b37208F2AC5Ad300CEd0Da6
   },
   {
     chainName: "scroll-sepolia",
     chainId: 534351,
-    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://sepolia-blockscout.scroll.io/address/0x15e0f178b0bA7bB97352b549bFb90c02De3f77C6
-    main: "0xF3D455664Af0A7FD690D45ab18623ce52987D07a", // https://sepolia-blockscout.scroll.io/address/0x302e33Cc40ECAd43e45B7854105E81B6ED5c5894
+    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://sepolia-blockscout.scroll.io/address/0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C
+    main: "0xF3D455664Af0A7FD690D45ab18623ce52987D07a", // https://sepolia-blockscout.scroll.io/address/0xF3D455664Af0A7FD690D45ab18623ce52987D07a
   },
   {
     chainName: "polygon-zkevm",
     chainId: 1442,
-    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://testnet-zkevm.polygonscan.com/address/0x15e0f178b0ba7bb97352b549bfb90c02de3f77c6
-    main: "0x95263f7b3994C8E3C71A446260d76d866FD63f69", // https://testnet-zkevm.polygonscan.com/address/0x2222B7aD8C04E23a0c4486Dc3C448a4b79E6642d
+    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://testnet-zkevm.polygonscan.com/address/0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C
+    main: "0x95263f7b3994C8E3C71A446260d76d866FD63f69", // https://testnet-zkevm.polygonscan.com/address/0x95263f7b3994C8E3C71A446260d76d866FD63f69
   },
   {
     chainName: "mantle-testnet",
     chainId: 5001,
-    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://testnet-zkevm.polygonscan.com/address/0x15e0f178b0ba7bb97352b549bfb90c02de3f77c6
-    main: "0x95263f7b3994C8E3C71A446260d76d866FD63f69", // https://testnet-zkevm.polygonscan.com/address/0x2222B7aD8C04E23a0c4486Dc3C448a4b79E6642d
+    token: "0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C", // USDC https://explorer.mantle.xyz/address/0x01e415Aaa374399b6E12D6c2a9AD0bd7648a116C
+    main: "0x95263f7b3994C8E3C71A446260d76d866FD63f69", // https://explorer.mantle.xyz/address//0x95263f7b3994C8E3C71A446260d76d866FD63f69
   },
 ];
 
