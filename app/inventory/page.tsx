@@ -24,10 +24,11 @@ export default function Inventory() {
       }
     }
     setContractAsync();
-  }, [signer, contract]);
+  }, [signer]);
 
   const getOwnedTokens = async () => {
     try {
+      console.log({ contract });
       const ownedTokensFromContract = await contract.getAllTutorTimeForStudent(
         await signer!.getAddress()
       );
@@ -63,14 +64,14 @@ export default function Inventory() {
   };
 
   useEffect(() => {
-    if (signer) {
+    if (signer && contract) {
       setLoading(true);
       getOwnedTokens();
       setLoading(false);
     } else {
       router.push("/");
     }
-  }, [signer]);
+  }, [signer, contract]);
 
   return (
     <main className="mx-32 mt-10 p-10 px-20 bg-[#181c2a] rounded-xl shadow-sm justify-center items-start relative">
@@ -81,6 +82,7 @@ export default function Inventory() {
       <div className="grid grid-cols-4 ">
         <WalletCards className="absolute w-36 h-36 text-6xl top-0 right-0 opacity-5" />
         {ownedTokens.length > 0 &&
+          !loading &&
           ownedTokens.map((timeToken, index) => {
             return (
               <div
